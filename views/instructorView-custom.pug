@@ -1,0 +1,163 @@
+// @author griggszm@msoe.edu
+
+html
+    head
+        link(rel="stylesheet" type="text/css" href="/custom.css")
+        link(rel="stylesheet" href="modalsonly/css/bootstrap.css")
+        script(src="https://www.gstatic.com/charts/loader.js")
+        script(src='/instructorGraph.js')
+        title= title
+    body(style="padding: 20px;")
+        div(overflow="auto")
+            img(src="images/logo_spacer.png" width="50" style="float: left;")
+            if(usingSprintForm)
+                div(class="h1")=dates
+            else
+                div(class="h1")=displayName
+        br
+        br
+
+        // Set up fields that will later on be used for graphing
+        // This allows us to pass data between pug and the javascript file.
+
+        - var projCount = 0;
+
+        for proj in projects
+            div(overflow="auto")
+                div(class="h1" )=proj.name
+            br
+            hr
+
+            input(id='data_' + projCount value=proj style='display:none;')
+            input(id='dates_' + projCount value=dateHeader.dailyTime style='display:none;')
+            div(id='chart_'+projCount style="width:900px; height: 500px;display: inline-block;")
+            - projCount++;
+            div(name='divider' style="width: 100%; height: 50px")
+            div(style="padding-bottom: 50px; width: 100%;display: inline-block;")
+                table.hide_overflow(id='full_tbl' cellspacing="0" style="margin:auto")
+                    tr
+                        td(align="right")
+                            table(id='left' cellspacing="0" width="280px" )
+                                thead
+                                    th.compact.bottomb.headcol.leftb.topb(align="center" height="38px") Names
+                                    th.compact.leftb.bottomb.topb.rightb(align="center" height="38px") Σ
+                                tbody
+                                    for name in proj.sorted_usernames
+                                        - u = proj.user_array[name];
+                                        if u.totalTime >= 0
+                                            tr
+                                                td.compact.bottomb.leftb(align="center")=u.name
+                                                td.compact.leftb.bottomb.rightb(align="center")=u.totalTime
+                                tfoot
+                                    tr(class="dailyHours")
+                                        td.compact.leftb.bottomb.rightb(colspan="2" align="right")="Daily hours total:   "
+                                    tr(class="weeklyHours")
+                                        td.compact.leftb.bottomb.rightb(colspan="2" align="right")="Weekly hours total:   "
+                        td
+                            table.overflow(id="overview" cellspacing="0")
+                                // Populate table header with information from a single-user date record (dateHeader)
+                                thead
+                                    for d in dateHeader.dailyTime
+                                        th.compact.rightb.bottomb.topb(style="white-space: pre; border-collapse: collapse !important;" align="center" height="38px")=d.desc
+                                // Populate table body with user daily time totals
+                                tbody
+                                    for name in proj.sorted_usernames
+                                        - u = proj.user_array[name];
+                                        if u.totalTime >= 0
+                                            tr
+                                                for dt in u.dailyTime
+                                                    if dt.timeSpent > 0
+                                                        td.compact.rightb.bottomb(align="center")
+                                                            - var individualIssues = dt.worklogs.issue;
+                                                            - var flagged = dt.worklogs.flagged;
+                                                            - var issues = individualIssues
+                                                            if(flagged)
+                                                                a(data-toggle="modal" data-target="#taskInfoModal" style="color:Orange" data-date=dt, data-filename=null, data-issue=issues)=dt.timeSpent
+                                                            else
+                                                                a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues)=dt.timeSpent
+                                                    else
+                                                        td.compact.rightb.bottomb(align="center") &nbsp;
+                                // Populate table footer with daily and weekly hour totals
+                                tfoot
+                                    tr(class="dailyHours")
+                                        // Iterate thru every date once (dateHeader)
+                                        for d in dateHeader.dailyTime
+                                            - var dailyTotal = 0
+                                            // Iterate thru all user daily time and sum daily total
+                                            for u in proj.user_array
+                                                for dt in u.dailyTime
+                                                    if dt.date == d.date
+                                                        - dailyTotal += dt.timeSpentSeconds
+                                            // If no work completed on a given day, print 0 | else print calculated total for all users
+                                            if dailyTotal == 0
+                                                td.compact.rightb.bottomb(align="center")=" "
+                                            else
+                                                if dailyTotal % 3600 === 0
+                                                    td.compact.rightb.bottomb(align="center")=(dailyTotal / 3600).toFixed(0)
+                                                else
+                                                    td.compact.rightb.bottomb(align="center")=(dailyTotal / 3600).toFixed(2)
+                                    tr(class="weeklyHours")
+                                        - var count = 1 // Used to print if range doesn't end on a Sunday
+                                        // Iterate thru every date once (dateHeader)
+                                        for d in dateHeader.dailyTime
+                                            - var weeklyTotal = 0
+                                            // Iterate thru all user daily time and sum to weekly total if day is in week
+                                            for u in proj.user_array
+                                                for dt in u.dailyTime
+                                                    if dt.endOfWeek.week == d.endOfWeek.week
+                                                        - weeklyTotal += dt.endOfWeek.weekTime
+                                            // If day is a Sunday, print out weekly total | else if not Sunday, but last day in range print total.
+                                            if d.endOfWeek.week == d.date || count == totalDays
+                                                if weeklyTotal / 3600 > 0
+                                                    if weeklyTotal % 3600 === 0
+                                                        td.compact.bottomb.rightb(align="center")=(weeklyTotal / 3600).toFixed(0)
+                                                    else
+                                                        td.compact.bottomb.rightb(align="center")=(weeklyTotal / 3600).toFixed(2)
+                                                else
+                                                    td.compact.bottomb=" "
+                                            else
+                                                td.compact.bottomb=" "
+                                            - count++
+            div(class="modal fade" id="taskInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskInfoModalLabel" aria-hidden="true")
+                div.modal-dialog
+                    div.modal-content
+                        div.modal-header
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                            h4.modal-title(id="taskInfoModalLabel") More Details
+                        div.modal-body
+                        div.modal-footer
+                            button(type="button" class="btn btn-default" data-dismiss="modal") Back
+    input(id='projectCount' value=projCount style='display:none;')
+form(method="POST" action="/viewInstructorProjects")
+    input(type="hidden" name="host" value=host)
+    div.mtl--row
+        div.mtl--col-val
+            button(id="refresh" name="refresh" style="width: 81%;" class="btn btn-primary projectColor") Refresh
+            input.form-control.input-lg(style='display:none' type="text" id="projectArray" name="projectArray" value=projectArray)
+            input.form-control.input-lg(style='display:none' type="text" id="from" name="from" value=from)
+            input.form-control.input-lg(style='display:none' type="text" id="to" name="to" value=to)
+            input.form-control.input-lg(style='display:none' type="text" id="displayName" name="displayName" value=displayName)
+
+form(method="POST" action="/viewInstructorProjects")
+    input(type="hidden" name="host" value=host)
+    div.mtl--row
+        div.mtl--col-val
+            button(id="nextWeek" name="nextWeek" style="width: 81%;" class="btn btn-primary projectColor") View Next Week
+            input.form-control.input-lg(style='display:none' type="text" id="projectArrayNext" name="projectArray" value=projectArray)
+            input.form-control.input-lg(style='display:none' type="text" id="fromNext" name="from" value=fromNextWeek)
+            input.form-control.input-lg(style='display:none' type="text" id="toNext" name="to" value=toNextWeek)
+form(method="POST" action="/viewInstructorProjects")
+    input(type="hidden" name="host" value=host)
+    div.mtl--row
+        div.mtl--col-val
+            button(id="lastWeek" name='lastWeek' style="width: 81%;" class="btn btn-primary projectColor") View Last Week
+            input.form-control.input-lg(style='display:none' type="text" id="projectArrayLast" name="projectArray" value=projectArray)
+            input.form-control.input-lg(style='display:none' type="text" id="fromLast" name="from" value=fromLastWeek)
+            input.form-control.input-lg(style='display:none' type="text" id="toLast" name="to" value=toLastWeek)
+
+        script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=', crossorigin='anonymous')
+        script(type="text/javascript" src="modalsonly/js/bootstrap.min.js")
+        script(type="text/javascript" src="custom.js")
+        script(type="text/javascript" src=alljs, data-options="sizeToParent:true")
+        script(type="text/javascript" src="dateConverter.js")

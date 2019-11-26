@@ -1,0 +1,146 @@
+html
+  head
+    link(rel="stylesheet" type="text/css" href="/custom.css")
+    link(rel="stylesheet" href="modalsonly/css/bootstrap.css")
+    script(src='/main.js')
+    script(src='/datepicker.js')
+    title= title
+  body(style="padding: 20px;")
+    // Color picker
+    //div(align="right")
+      button(class="jscolor {value:'cc0000'}" onblur="update(this.jscolor)") Change Color
+    // Date range
+    div(overflow="auto")
+      img(src="images/logo_spacer.png" width="50" style="float: left;")
+      h1(align="center")=pnmessage
+      img(src="images/msoe_logo.png" width="50" style="float: right")
+      h2(align="center")=message
+
+    br
+    div(align="center")
+      form(method="POST" action="/download" align="center")
+        input(type="hidden" name="filename" value=file)
+        input(type="hidden" name="user" value=user)
+        input(type="hidden" name="dateHeader" value=dateHeader)
+        input(type="hidden" name="totalDays" value=totalDays)
+        //button Download CSV
+
+    form(method="POST" action="/getInfoForOtherSprint")
+      .row
+        .col-sm-6
+          .form-group
+            div(align="center" style="margin-top: -30px;")
+              select(id='sprintList' name='sprintList' placeholder="Please select a project to view sprints").select.form-control.input-lg
+                for s in sprintlist
+                  option(value=s.sprint.name, name=s.sprint.name, selected)=s.sprint.name
+              button(id="sprintinfo" name="sprintinfo" style="margin-left: 10px;") Update Sprint
+
+    //Tempo-like table
+    div(style="padding-bottom: 50px; width: 100%;" align="center")
+      table.hide_overflow(id='full_tbl' cellspacing="0" align="center")
+        tr
+          td(align="right")
+            table(id='left' cellspacing="0" width="200px")
+              thead
+                th.compact.bottomb.headcol(align="center" height="38px") Names
+                th.compact.rightb.bottomb(align="center" height="38px") Σ
+              tbody
+                for u in user
+                  tr
+                    td.compact.bottomb(align="center")=u.name
+                    td.compact.rightb.bottomb(align="center")=u.totalTime
+              tfoot
+                tr
+                  td.compact.rightb.bottomb(colspan="2" align="right")="Daily hours total:   "
+                tr
+                  td.compact.rightb.bottomb(colspan="2" align="right")="Weekly hours total:   "
+          td
+            table.overflow(id="overview" cellspacing="0")
+              // Populate table header with information from a single-user date record (dateHeader)
+              thead
+                for d in dateHeader.dailyTime
+                  th.compact.rightb.bottomb(style="white-space: pre; border-collapse: collapse !important;" align="center" height="38px")=d.desc
+              // Populate table body with user daily time totals
+              tbody
+                for u in user
+                  tr
+                    for dt in u.dailyTime
+                      if dt.timeSpent > 0
+                        td.compact.rightb.bottomb(align="center")
+                          a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=filename)=dt.timeSpent
+                      else
+                        td.compact.rightb.bottomb(align="center") &nbsp;
+              // Populate table footer with daily and weekly hour totals
+              tfoot
+                tr
+                  // Iterate thru every date once (dateHeader)
+                  for d in dateHeader.dailyTime
+                    - var dailyTotal = 0
+                    // Iterate thru all user daily time and sum daily total
+                    for u in user
+                      for dt in u.dailyTime
+                        if dt.date == d.date
+                          - dailyTotal += dt.timeSpentSeconds
+                    // If no work completed on a given day, print 0 | else print calculated total for all users
+                    if dailyTotal == 0
+                      td.compact.rightb.bottomb(align="center")=" "
+                    else
+                      if dailyTotal%3600 === 0
+                        td.compact.rightb.bottomb(align="center")=(dailyTotal/3600).toFixed(0)
+                      else
+                        td.compact.rightb.bottomb(align="center")=(dailyTotal/3600).toFixed(2)
+                tr
+                  - var count = 1 // Used to print if range doesn't end on a Sunday
+                  // Iterate thru every date once (dateHeader)
+                  for d in dateHeader.dailyTime
+                    - var weeklyTotal = 0
+                    // Iterate thru all user daily time and sum to weekly total if day is in week
+                    for u in user
+                      for dt in u.dailyTime
+                        if dt.endOfWeek.week == d.endOfWeek.week
+                          - weeklyTotal += dt.endOfWeek.weekTime
+                    // If day is a Sunday, print out weekly total | else if not Sunday, but last day in range print total.
+                    if d.endOfWeek.week == d.date || count == totalDays
+                      if weeklyTotal/3600 > 0
+                        if weeklyTotal%3600 === 0
+                          td.compact(align="center")=(weeklyTotal/3600).toFixed(0)
+                        else
+                          td.compact(align="center")=(weeklyTotal/3600).toFixed(2)
+                      else
+                        td.compact=" "
+                    else
+                      td.compact=" "
+                    - count++
+
+    // Table with task/issue related information
+    //div
+    //  table(id="task" class="display" width="100%")
+    //    thead
+    //      th Key
+    //      th Status
+    //      th Time (h)
+    //      th Summary
+    //    tbody
+    //      for t in task
+    //        tr
+    //          td=t.key
+    //          td=t.status
+    //          td=t.seconds
+    //          td=t.summary
+
+    // Shared modal the displays dynamic information for each worklog on a given day
+    div(class="modal fade" id="taskInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskInfoModalLabel" aria-hidden="true")
+      div.modal-dialog
+        div.modal-content
+          div.modal-header
+            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+              span(aria-hidden="true") &times;
+            h4.modal-title(id="taskInfoModalLabel") More Details
+          div.modal-body
+          div.modal-footer
+            button(type="button" class="btn btn-default" data-dismiss="modal") Back  
+
+    script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=', crossorigin='anonymous')
+    script(type="text/javascript" src="modalsonly/js/bootstrap.min.js")
+    script(type="text/javascript" src="custom.js")
+    script(type="text/javascript" src=alljs, data-options="sizeToParent:false")

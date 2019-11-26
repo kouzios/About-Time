@@ -1,0 +1,248 @@
+html
+    head
+        // Note: This isn't very useful, but does allow us to easily add this feature later if we really have to
+        - usingSprintForm = true
+        link(rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+        link(rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.12/css/aui.min.css" media="all")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/main.css")
+        script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=', crossorigin='anonymous')
+        title= title
+    body(style="overflow-x: hidden;").mtl--wrapper
+        h1(id="title" class="projectColor") AboutTime
+        h2(id="title_label" class="projectColor") Time Viewer
+        h3(id="error").error=error
+        h3(id="success").success=success
+
+        //The purpose of the form is to allow for a post request that comes from pressing the view logs button
+            The body is contained in the "value" fields of the elements and the "name" of the
+            elements is the name of the attribute in the body (req.body.<name>)
+        form(method="POST" action="/timeresultsForSprint" id="mainPage")
+            input(type="hidden" name="host" value=host)
+            input(type="hidden" name="usingSprintForm" id="usingSprintForm" value=usingSprintForm.toString())
+            input(type="hidden" name="hasConfluence" id="hasConfluence" value=has_confluence.toString())
+            //p(id="statusReportInfo" style="display: none;")
+                | While using the sprint list, the web application will automatically determine the week start and end dates
+                | based off of the sprint dates. Otherwise you can use the custom dates to generate a status report for any period.
+                | If there is a Status report already existing with that name, it will be updated with the newest information.
+
+            .row
+                .col-sm-4
+                    .form-group
+                        label.control-label.requiredField(for='projectList' class="dropDownLabel")
+                            | Project
+                        .col-xs-12
+                            - var matched = false;
+                            select(id='projectList' name='projectList' placeholder="Please select a project").select.form-control.input-lg
+                                if (recent)
+                                    option(value="Recent List", name="divider", disabled, style="color:white; background-color:gray")="Recent projects"
+                                    for item in (recent)
+                                        if (pn && item.name === pn.name && !matched)
+                                            option(value=(item.key + "," + item.name), data-key=item.key, name=item.name, selected)=item.name
+                                            - matched = true;
+                                        else
+                                            option(value=(item.key + "," + item.name), data-key=item.key, name=item.name)=item.name
+                                option(value="Alphabetic List", name="divider", disabled, style="color:white; background-color:gray")="Alphabetic List"
+                                for p in project.project_array
+                                    if (pn && p.name === pn.name && !matched)
+                                        option(value=(p.key + "," + p.name), data-key=p.key, name=p.name, selected)=p.name
+                                        - matched = true;
+                                    else
+                                        option(value=(p.key + "," + p.name), data-key=p.key, name=p.name)=p.name
+                                if(dormant)
+                                    option(value="Dormant List", name="divider", disabled, style="color:white; background-color:gray")="Dormant Projects"
+                                    for d in dormant
+                                        if (pn && d.name === pn.name && !matched)
+                                            option(value=(d.key + "," + d.name), name=d.name, selected)=d.name
+                                            - matched = true;
+                                        else
+                                            option(value=(d.key + "," + d.name), name=d.name)=d.name
+                                    //if (p.boardid != null)
+                                        if (p.name == pn)
+                                            option(value=p.name, name=p.name, selected)=p.name
+                                        else
+                                            option(value=p.name, name=p.name)=p.name
+                        //.col-xs-12
+                        //    //if(allProjectsChecked === 'true')
+                        //    //    input(type='checkbox', id='showAllProjects', name='showAllProjects', value='true', checked="checked")
+                        //    //    label.control-label(for='showAllProjects')
+                        //    //        | Show all projects
+                        //    //else
+                        //    //    input(type='checkbox', id='showAllProjects', name='showAllProjects', value='true')
+                        //    //    label.control-label(for='showAllProjects')
+                        //    //        | Show all projects
+            div(id="statusReportListDiv" style="display: none;")
+                //.row
+                    .col-sm-4
+                        .form-group
+                            label.control-label.requiredField(for='statusReportList')
+                                | Status Reports
+                            .col-xs-12
+                                select(id='statusReportList' name='statusReportList' placeholder="Please select a project to view directories").select.form-control.input-lg
+
+            div(id="sprintListDiv" style=usingSprintForm ? "" : "display: none;")
+                .row
+                    .col-sm-4
+                        .form-group
+                            label.control-label.requiredField(for='sprintList' class="dropDownLabel")
+                                | Sprint
+                            .col-xs-12
+                                select(id='sprintList' name='sprintList' placeholder="Please select a project to view sprints").select.form-control.input-lg
+
+            div(id="custom_datepicker" style=usingSprintForm ? "display: none;" : "")
+                .row
+                    .col-sm-4
+                        .form-group
+                            label.control-label.requiredField(for="from" class="dropDownLabel")
+                                | From
+                            .col-xs-12
+                                input.form-control.input-lg(type="text" id="from" name="from" value=from)
+                .row
+                    .col-sm-4
+                        .form-group
+                            label.control-label.requiredField(for="to" class="dropDownLabel")
+                                | Until
+                            .col-xs-12
+                                input.form-control.input-lg(type="text" id="to" name="to" value=to)
+
+            div.mtl--row
+                div.mtl--col-val
+                    button(id="date_btn" type="button" class="btn btn-primary") Use Custom Date
+                    button(id="editreport_btn" type="button" style="display: none;" class="btn btn-primary") Edit
+                    button(id="sprint_btn" type="button" style="display: none;" class="btn btn-primary") Use Sprint List
+                    button(id="newreport_btn" type="button" style="display: none;" class="btn btn-primary projectColor") Generate Report
+                    button(id="show" name="show" type="button" class="btn btn-primary projectAccent") View Logs
+            div.mtl--row
+                div.mtl--col-val
+                    button(id="timeview_btn" type="button" style="display: none; width: 77%;" class="btn btn-primary") Go to Time Viewer
+                    button(id="report_btn" type="button" style="width: 65%;" class="btn btn-primary") Go to Status Report Generator
+            div.mtl--row(id="space_select")
+                div.mtl--col-val
+                    if has_confluence
+                        p#current_space='Currently writing to space: none'
+                        .col-xs-12
+                            select(id="selectSpace").select.form-control.input-lg
+                                option(name='Select a Space', selected)="Select a Space"
+                                for space in spaces
+                                    option(name=space.name, value=space.key, data-url=space.url)=space.name
+                    span(id="generateReportStatus" class="projectColor")
+                div(id="weekListAndLabel" style="display: none;").mtl--row
+                    div.mtl--col-val
+                        label.control-label.requiredField(class="dropDownLabel")
+                            | Weeks
+                        //The div that holds the week checkboxes
+                        .col-xs-12
+                            div(id='weekList' style="overflow:scroll; height:100px; overflow-x: hidden;").select.form-control.input-lg
+            div(id="dialog-confirm")
+
+            button(id="instructions_button" type="button" onclick="document.getElementById('instruction_view').style.display='block'" class="btn btn-primary projectAccent") Access this addon from project view
+            button(id="about_button" type="button" onclick="document.getElementById('about_us').style.display='block'" class="btn btn-primary projectAccent") About Us
+            button(id="submit_bug_btn" type="button" onclick="document.getElementById('submit_a_bug').style.display='block'" class="btn btn-primary projectAccent") Submit an issue
+
+            //clock canvas
+            div(id="clockDiv")
+                canvas(id="clock" width="2000" height="2000" style="background-color:#fff")
+
+        // Created by sullivan-bormannaj
+        div(id="submit_a_bug" class="modal")
+            form(onsubmit="submitIssue()" id="bugPage" class="modal-content")
+                input(type="hidden" name="host" value=host)
+                div(class="bug_inputs")
+                    h1(class="projectColor") Submit an issue
+                    h4 Title of issue (required)
+                    input(type="text" placeholder="Enter title of issue" name="issueTitle" id="issueTitle" required).select.form-control.input-lg
+                    h4 Description of Issue (required)
+                    textarea(placeholder="Enter description of issue" name="issueDescription" id="issueDescription" rows="5" required).select.form-control.input-lg
+                    h4 Type of issue
+                    select(name="issueType" id='issueType').select.form-control.input-lg
+                        option bug
+                        option enhancement
+                        option proposal
+                        option task
+                    h4  Priority
+                    select(name="issuePriority" id='issuePriority').select.form-control.input-lg
+                        option trivial
+                        option minor
+                        option major
+                        option critical
+                        option blocker
+                    h4 Contact information (Optional but recommended)
+                    input(type="text" placeholder="Enter your email" name="issueEmail" id='issueEmail').select.form-control.input-lg
+                    // #[{Insert Pug here}] inserts pug tags inline. It doesn't highlight in Webstorm, but it does behave like a separate tag.
+                    h4 Please check the issues page #[a( href="https://bitbucket.org/hasker/abouttime/issues?status=new&status=open" target="_blank") here] to see if your issue has already been reported.
+                    div.mtl--row
+                        button(type="button" id="bug_cancel_button" onclick="document.getElementById('submit_a_bug').style.display='none'" class="btn btn-primary") Cancel
+                        button(type="button" id="bug_submit_button" onclick='submitIssue()' class="btn btn-primary").projectColor Submit
+
+        div(id="about_us" class="modal")
+            div(class="modal-content")
+                div(class="about")
+                    h1(class="projectColor") About Us
+                    br
+                    h4 AboutTime is a Jira add-on that was designed to facilitate project based coursework in the software engineering program at the Milwaukee School of Engineering. Work logs that are entered into Jira may be viewed by the add on, either by sprint or by date range, and include important data like description and time worked. These work logs can be viewed for a single project or for multiple projects at once. The AboutTime status report generator can create a Confluence page detailing what each member of a team has done, including time worked and tasks worked on during a week, an entire sprint, or over a custom date range.
+                    h4 This project was made in the Milwaukee School of Engineering's Software Development Laboratory (SDL) class, with Dr. Taylor as the product owner.
+                    h3 Development Team
+                    h4 This add-on was developed in Dr. Hasker's 2016-2017 SDL by:
+                    h4 - Dora Kung
+                    h4 - Brandon Herman
+                    h4 - Tripp Horbinski
+                    h4 - Jake Robers
+                    br
+                    h4 Additional development was done in Dr. Hasker's 2017-2018 SDL by:
+                    h4 - Brandon Jackson
+                    h4 - Andrew Sullivan-Bormann
+                    h4 - Zachary Griggs
+                    h4 - Connor Walters
+                    br
+                    button(type="button" id="about_close_button" onclick="document.getElementById('about_us').style.display='none'" class="btn projectColor") Exit
+
+        div(id="instruction_view" class="modal")
+            div(class="modal-content")
+                div(class="instructions")
+                    h1(class="projectColor") How to link to this addon from your project page
+                    br
+                    h4 From your project page, click "Add Item". Then, choose shortcut. Enter the url below to the web address field and "AboutTime" as the name.
+                    br
+                    a(id="addonURL" href=rawHost + "/plugins/servlet/ac/edu.msoe.abouttime/abouttime-general" target="_blank")=rawHost + "/plugins/servlet/ac/edu.msoe.abouttime/abouttime-general"
+                    br
+                    img.image(src='/images/AddItem.png' id='addItemImage')
+                    img.image(src='/images/AddShortcut.png' id='addShortcutImage')
+                    br
+                    h4 If you don't see the "Add Item" button, contact your administrator to add this link for you.
+                    button(type="button" id="instruction_close_button" onclick="document.getElementById('instruction_view').style.display='none'" class="btn projectColor") Exit
+
+        div(id="preview_buttons")
+            if has_confluence
+                div.clearfix
+                    button(id="preview_confirm" type="button" style="display: none;" class="btn btn-primary projectColor") Generate this Report
+                    button(id="preview_cancel" type="button" style="display: none;" class="btn btn-primary projectColor") Cancel
+                div(id="generateReportFromPreview" class="projectColor")
+            else
+                div.clearfix
+                    button(id="preview_cancel" type="button" style="display: none;" class="btn btn-primary projectColor") Go Back
+
+        form(method="GET" action="/showInstructorView" id="instructorViewForm")
+            input(type="hidden" name="host" value=host)
+            div.mtl--row
+                div.mtl--col-val
+                    button(id="instructorView" type="button" style="width: 65%;" class="btn btn-primary projectColor") Dashboard View
+
+        div(class="modal fade" id="taskInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskInfoModalLabel" aria-hidden="true")
+            div.modal-dialog
+                div.modal-content
+                    div.modal-header
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                        h4.modal-title(id="taskInfoModalLabel") More Details
+                    div.modal-body
+                    div.modal-footer
+                        button(type="button" class="btn btn-default" data-dismiss="modal") Back
+
+script(src='/main.js')
+script(src='/statusReport.js')
+script(src='/clock.js')
+script(src='/datepicker.js')
+script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+script(src="https://code.jquery.com/jquery-1.12.4.js")
+script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
+script(type="text/javascript" src=alljs, data-options="sizeToParent:true")

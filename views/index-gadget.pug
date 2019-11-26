@@ -1,0 +1,41 @@
+html
+    head
+        link(rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+        link(rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.12/css/aui.min.css" media="all")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/main.css")
+        script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=', crossorigin='anonymous')
+        title= title
+    body.mtl--wrapper
+      h2 MSOE Time Log Viewer
+      p.error= error
+
+      form(method="POST" action="/timeresultsForSprint")
+        input(type="hidden" name="host" value=host)
+        .row
+            .col-sm-6
+                .form-group
+                    label.control-label.requiredField(for='projectList')
+                        | Project
+                    .col-xs-12
+                        select(id='projectList' name='projectList' placeholder="Please select a project").select.form-control.input-lg
+                          for p in project
+                            if (p.boardid != null)
+                              if (p.name == pn)
+                                option(value=p.name, name=p.name, selected)=p.name
+                              else
+                                option(value=p.name, name=p.name)=p.name
+
+
+        div.mtl--row
+            div.mtl--col-val
+                button(id="show" name="show") Submit
+
+
+    script(src='/main.js')
+    script(src='/datepicker.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    script(src="https://code.jquery.com/jquery-1.12.4.js")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
+    script(type="text/javascript" src=alljs, data-options="sizeToParent:false")
+    //make sure sizeToParent is set to false

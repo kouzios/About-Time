@@ -1,0 +1,532 @@
+html
+    head
+        link(rel="stylesheet" type="text/css" href="/custom.css")
+        link(rel="stylesheet" href="modalsonly/css/bootstrap.css")
+        title= title
+    body(style="padding: 20px")
+        // Color picker
+        //div(align="right")
+            button(class="jscolor {value:'cc0000'}" onblur="update(this.jscolor)") Change Color
+        // Date range
+        div(overflow="auto")
+            img(src="images/logo_spacer.png" width="50" style="float: left;")
+            div(class="tooltip h1")=message1
+                if times1
+                    span(class="tooltiptext")=times1
+            div(class="inline h1")=" - "
+            div(class="tooltip h1")=message2
+                if times2
+                    span(class="tooltiptext")=times2
+        br
+        div(style="display: inline-block" align="center")
+            form(style="display: inline-block" method="GET" action="/main" align="center")
+                button(id="homebtn") Home
+
+            form(style="display: inline-block" method="POST" action="/download" align="center")
+                input(type="hidden" name="filename" value=file)
+                input(type="hidden" name="user" value=user)
+                input(type="hidden" name="dateHeader" value=dateHeader)
+                input(type="hidden" name="totalDays" value=totalDays)
+                button(id="csvbtn") Export Table as CSV
+
+            form(style="display: inline-block" method="POST" action="/timeresultsForSprint" id="mainPage")
+                input(type='hidden' name="usingSprintForm" id="usingSprintForm" value=usingSprintForm.toString())
+                input(type='hidden' name="to" id="to" value=to)
+                input(type='hidden' name="from" id="from" value=from)
+                input(type='hidden' name="projectName" id="projectName" value=projectName)
+                input(type='hidden' name="sprint" id="sprint" value=sprint)
+                input(type='hidden' name="current0" id="current0" value=current0)
+                input(type='hidden' name="current1" id="current1" value=current1)
+                input(type='hidden' name="refreshing" id="refreshing" value="true")
+                button(id="refreshButton" name="refreshButton" class="btn-primary projectAccent") Refresh Page
+
+            form(method="POST" action="/printPreview" class='inline' id='print-preview')
+                input(type="hidden" name="filename" value=file)
+                input(type="hidden" name="user" value=user)
+                input(type="hidden" name="dateHeader" value=dateHeader)
+                input(type="hidden" name="totalDays" value=totalDays)
+                input(type='hidden' name="projectName" id="projectName" value=projectName)
+                input(type='hidden' name="to" id="to" value=to)
+                input(type='hidden' name="from" id="from" value=from)
+                input(type='hidden' name="sprint" id="sprint" value=sprint)
+                input(type='hidden' name="startDateInput" value=startDateInput id="startDateInput")
+                input(type='hidden' name="endDateInput" value=endDateInput id="endDateInput")
+                input(type='hidden' name="healthMetricKey" value="false" id="healthMetricKey")
+                input(type='hidden' name="healthMetricWarningsEnabled" value="false" id="healthMetricWarningsEnabled")
+                input(type='hidden' name="pdfWarnings" value="" id="pdfWarnings")
+                // rwh, 11/14/19: commented out to avoid crash: button(id="print") Printable Time Table
+                label(id="hotMinuteLabel" hidden) May take a hot minute
+            
+        br
+        div(style="display: inline-block" align="center")
+            form(method="POST" action="/useDateRange" style="display: inline-block" class="inline" id="dateChangeForm")
+                input(type='hidden' name="usingSprintForm" id="usingSprintForm" value=usingSprintForm.toString())
+                input(type='hidden' name="to" id="to" value=to)
+                input(type='hidden' name="from" id="from" value=from)
+                input(type='hidden' name="projectName" id="projectName" value=projectName)
+                input(type='hidden' name="sprint" id="sprint" value=sprint)
+                input(type='hidden' name="current0" id="current0" value=current0)
+                input(type='hidden' name="current1" id="current1" value=current1)
+                input(type='hidden' name="refreshing" id="refreshing" value="true")
+                label.control-label.requiredField(for="startDateInput") Start Date: 
+                input(type="date" name="startDateInput" value=startDateInput id="startDateInput")
+                label.control-label.requiredField(for="endDateInput")   End Date: 
+                input(type="date" name="endDateInput" value=endDateInput id="endDateInput")
+                button(id="changeDateButton" enabled=false) Use Inputted Dates
+        br
+            
+        div(style="display: inline-block" align="center")
+            button(id="toggleBtn" enabled=false onclick='tog()') Show Key
+                script.
+                    var tog = function() {
+                        $("#healthKey").toggle();
+                        if (document.getElementById("healthKey").style.display === "none"){
+                            //If the key is not shown on the view logs page, don't show it on the print preview page
+                            document.getElementById("healthMetricKey").value = "false";
+                            document.getElementById("toggleBtn").innerHTML = "Show Key";
+                        } else {
+                            //If the key is shown on the view logs page, show it on the print preview page
+                            document.getElementById("healthMetricKey").value = "true";
+                            document.getElementById("toggleBtn").innerHTML = "Hide Key";
+                        }
+                    }
+            button(id="warningdisplay" enabled=false onclick='toggle()' hidden) Show Warnings
+                script.
+                    var toggle = function() {
+                        $("#warnings").toggle();
+                        if (document.getElementById("warnings").style.display === "none"){
+                            document.getElementById("healthMetricWarningsEnabled").value = "false";
+                            document.getElementById("warningdisplay").innerHTML = "Show Warnings";
+                        } else {
+                            document.getElementById("healthMetricWarningsEnabled").value = "true";
+                            document.getElementById("warningdisplay").innerHTML = "Hide Warnings";
+                        }
+                    }
+
+            br
+            p(id="healthKey" class="repeating-linear" style='white-space:pre;' align="center" hidden) 
+                | Individual Health Key (x = (daysIntoTheSprint * 1.4)):
+                | 😔: < 50% x | 😐: 50% ≤ x < 70% | 😀 70% ≤ x < 100% | 💯: 100% ≤ x
+                | 
+                | Team Health Key (Sprint-long basis):
+                | 😔: < 50% hours | 😐: 50% ≤ hours < 70% | 😀 70% ≤ hours < 100% | 💯: 100% ≤ hours
+                   
+        //Tempo-like table
+        div(style="width: 100%;" align="center")
+        - var timespent = 0;
+        - var totalTimeBetweenUsers = 0;
+        - var minimumTimePerSprint = 0;
+        - var numberOfMembers = 0;
+        - var daysIntoTheSprint = 0;
+        - var expectedTime = 0;
+        - var firstDayOfSprint = "";
+        - var consecutiveDaysWithZeroTimeLogs = 0;
+        - var count = 0;
+        
+        <!-- Following date code derived from https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript-->
+        - var today = new Date();
+        - var date = today.getDate();
+        - var month = today.getMonth() + 1; //January is 0!
+        - var year = today.getFullYear();
+        - if (date < 10) {
+        -   date = '0' + date;
+        - }
+        - if (month < 10) {
+        -   month = '0' + month;
+        - }
+        - today = year + '-' + month + '-' + date;
+        - today = today.toString();
+
+        <!-- Get the first date of the sprint from the JSON object-->
+        for d in dateHeader.dailyTime
+            - firstDayOfSprint = d.date
+            - break 
+
+        <!-- Following date code derived from https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript-->
+        - var date1 = new Date(firstDayOfSprint);
+        - var date2 = new Date(today);
+        - var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        - var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); // this is the # of days a team is into their sprint
+        br
+        br
+        <!-- calculates the expected amount of time to be logged-->
+        - if (diffDays > 21){
+            - diffDays = 21
+            - expectedTime = (diffDays * 1.42857142857).toFixed(2)
+            p(class="sprint-data" style='white-space:pre;' align="center")
+                | Days into the sprint: SPRINT HAS ENDED.
+                |
+                | Expected hours: 30.00
+        - } else if (diffDays === 21){
+            - expectedTime = (diffDays * 1.42857142857).toFixed(2)
+            p(class="sprint-data" style='white-space:pre;' align="center")
+                | Days into the sprint: #{diffDays} (Last day of sprint)
+                |
+                | Expected hours: #{expectedTime}
+            br
+        - } else if (diffDays > 0 && diffDays < 21) {
+            - expectedTime = (diffDays * 1.42857142857).toFixed(2)
+            p(class="sprint-data" style='white-space:pre;' align="center")
+                | Days into the sprint: #{diffDays}
+                |
+                | Expected hours: #{expectedTime}
+            br
+        - } else if (diffDays === 0) {
+            - expectedTime = 0
+            p(class="sprint-data" style='white-space:pre;' align="center")
+                | Days into the sprint: 0
+                |
+                | Expected hours: #{expectedTime}
+            br
+        - } else {
+            - expectedTime = 0
+            p(class="sprint-data" style='white-space:pre;' align="center")
+                | Error: No Sprint Data Available!
+                |
+                | Expected hours: #{expectedTime}
+            br
+        - }
+
+        <!-- Sets up the p tag for where the warnings will displayed -->
+        p(id="warnings" hidden)
+        script.
+             document.getElementById("warningdisplay").style.visibility = "hidden";
+            
+
+    
+        <!-- The following segment checks for the different warnings to display once the user clicks the "show warnings" button-->
+        - var i = 0;
+        - var currName;
+        - var printed = false;
+        - var dsplyWrning = false;
+        - var currentName;
+        - var guiltyOne = false;
+        - var guiltyTwo = false;
+        - var guiltyThree = false;
+        - dateHeader.dailyTime = Object.values(dateHeader.dailyTime)
+
+        <!-- function taken from: https://pastebin.com/Ti4iPmKe -->
+      
+        for name in sorted_usernames
+            - u = user[name]
+            - currName = u.name
+            
+            // checks for the "less than 50% warning"
+            - if (u.totalTime < (.50 * expectedTime)){
+                - guiltyOne = true
+            - }
+
+            // checks for the "3+ days without time log" warning
+            for dt in u.dailyTime
+                - if (diffDays >= 4 && typeof u !== 'undefined'){
+                    - while (i < diffDays){
+                        - if (dt.timeSpent === 0){
+                            - consecutiveDaysWithZeroTimeLogs++
+                            - if (consecutiveDaysWithZeroTimeLogs >= 3){
+                                - guiltyTwo = true
+                                - break
+                            - }
+                        - } else {
+                            - consecutiveDaysWithZeroTimeLogs = 0
+                        - }
+                        -i++
+                    - }
+                - }
+                
+            // styling the actual printing of these two issues 
+            - if (guiltyOne === true && guiltyTwo === true){
+                script.
+                    document.getElementById("warningdisplay").style.visibility = "visible";
+                    document.getElementById("warnings").innerHTML += (" <span class='month'> • Name: " + (!{JSON.stringify(currName)}) + "</span><br>")
+                    document.getElementById("warnings").innerHTML += (" - You're at less than 50% of your hours!<br>")
+                    document.getElementById("warnings").innerHTML += (" - You have went 3+ days without logging hours!<br>")
+                script.
+                    document.getElementById("pdfWarnings").value += (" • Name: " + (!{JSON.stringify(currName)}) + "<br>" + " - You're at less than 50% of your hours!<br>" + " - You have went 3+ days without logging hours!<br>")
+            - } else if (guiltyOne === true && guiltyTwo === false){
+                script.
+                    document.getElementById("warningdisplay").style.visibility = "visible";
+                    document.getElementById("warnings").innerHTML += (" <span class='month'> • Name: " + (!{JSON.stringify(currName)}) + "</span><br>")
+                    document.getElementById("warnings").innerHTML += (" - You're at less than 50% of your hours!<br>")
+                script.
+                    document.getElementById("pdfWarnings").value += (" • Name: " + (!{JSON.stringify(currName)}) + "<br>" + " - You're at less than 50% of your hours!<br>")
+            - } else if (guiltyOne === false && guiltyTwo === true){
+                script.
+                    document.getElementById("warningdisplay").style.visibility = "visible";
+                    document.getElementById("warnings").innerHTML += (" <span class='month'> • Name: " + (!{JSON.stringify(currName)}) + "</span><br>")
+                    document.getElementById("warnings").innerHTML += (" - You have went 3+ days without logging hours!<br>")
+                script.
+                    document.getElementById("pdfWarnings").value += (" • Name: " + (!{JSON.stringify(currName)}) + "<br>" + " - You have went 3+ days without logging hours!<br>")
+            - } else {
+                // do nothing.
+            - }
+
+            // checks for the "suspicious time logs" warning
+            for dt in u.dailyTime
+                if dt.timeSpent > 0
+                    - var flag = dt.worklogs.flagged;
+                    if(flag)
+                        - guiltyThree = true;
+                        - if (guiltyOne === true || guiltyTwo === true){
+                            script.
+                                document.getElementById("warnings").innerHTML += (" - You have a suspicious time log on " + (!{JSON.stringify(dt.date)}) + "!<br>")
+                            script.
+                                document.getElementById("pdfWarnings").value += (" - You have a suspicious time log on " + (!{JSON.stringify(dt.date)}) + "!<br>")
+                        - } else if (guiltyOne === false && guiltyTwo === false){
+                            - if (printed === false){
+                                script.
+                                    document.getElementById("warningdisplay").style.visibility = "visible";
+                                    document.getElementById("warnings").style.color = "red"
+                                    document.getElementById("warnings").innerHTML += (" <span class='month'> • Name: " + (!{JSON.stringify(currName)}) + "</span><br>")
+                                    document.getElementById("warnings").innerHTML += (" - You have a suspicious time log on " + (!{JSON.stringify(dt.date)}) + "!<br>")
+                                script.
+                                    document.getElementById("pdfWarnings").value += (" • Name: " + (!{JSON.stringify(currName)}) + "<br>" + " - You have a suspicious time log on " + (!{JSON.stringify(dt.date)}) + "!<br>")
+                                - printed = true
+                            - } else if (printed === true){
+                                script.
+                                    document.getElementById("warnings").innerHTML += (" - You have a suspicious time log on " + (!{JSON.stringify(dt.date)}) + "!<br>")
+                                script.
+                                    document.getElementById("pdfWarnings").value += (" - You have a suspicious time log on " + (!{JSON.stringify(dt.date)}) + "!<br>")
+                            - }
+                        - }
+
+            <!-- The following segment checks which of the warnings are true for each user on a given team and prints a new line character to separate them and their warnings from the next person and their warnings-->
+            - if (guiltyOne === false && guiltyTwo === false && guiltyThree === false){
+                // do nothing - don't print anything
+            - } else if (guiltyOne === true && guiltyTwo === true && guiltyThree === true){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - }
+
+            - if (guiltyOne === true && guiltyTwo === false && guiltyThree === false){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - } else if (guiltyOne === false && guiltyTwo === true && guiltyThree === false){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - } else if (guiltyOne === false && guiltyTwo === false && guiltyThree === true){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - }
+
+            - if (guiltyOne === true && guiltyTwo === true && guiltyThree === false){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - } else if (guiltyOne === true && guiltyTwo === false && guiltyThree === true){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - } else if (guiltyOne === false && guiltyTwo === true && guiltyThree === true){
+                script.
+                    document.getElementById("warnings").innerHTML += ("<br>")
+            - }
+
+        <!-- Rest of the code creates and populates the table -->
+        table.hide_overflow(id='full_tbl' cellspacing="0" align="center")
+                tr
+                    td(align="right")
+                        table(id='left' cellspacing="0" width="280px")
+                            thead
+                                th.compact.bottomb.headcol.leftb.topb(align="center" height="38px") Names
+                                th.compact.leftb.bottomb.topb.rightb(align="center" height="38px") Σ
+                            tbody
+                                for name in sorted_usernames
+                                    - u = user[name]
+                                    - currName = u.name
+                                    if u.totalTime >= 0
+                                        - timespent = u.totalTime
+                                
+                                        for ds in u.dailyTime
+                                            if ds.timeSpent > 0
+                                            
+                                        tr
+                                            td.compact.bottomb.leftb(align="center" height = "38px")=currName
+                                            - if (u.totalTime < (.50 * expectedTime)){
+                                            td.compact.leftb.bottomb.rightb(align="center" height = "40px")
+                                                a(align="center" height = "40px")=(u.totalTime + " 😔")
+                                            - } else if (u.totalTime >= (.50 * expectedTime) && u.totalTime < (.70 * expectedTime)){
+                                            td.compact.leftb.bottomb.rightb(align="center" height = "40px")
+                                                a(align="center" height = "40px")=(u.totalTime +  " 😐")
+                                            - } else if (u.totalTime >= (.70 * expectedTime) && u.totalTime < (1 * expectedTime)){
+                                            td.compact.leftb.bottomb.rightb(align="center" height = "40px")
+                                                a(align="center" height = "40px")=(u.totalTime + " 😀")
+                                            - } else if (u.totalTime >= (1 * expectedTime) || u.totalTime >= 30){
+                                            td.compact.leftb.bottomb.rightb(align="center" height = "40px")
+                                                 a(align="center" height = "40px")=(u.totalTime + " 💯")
+                                            - }
+                                            - totalTimeBetweenUsers += parseFloat(u.totalTime)
+                            tfoot
+                                tr(class="dailyHours")
+                                    td.compact.leftb.bottomb.rightb(colspan="2" align="right" height="40px")="Daily hours total:   "
+                                tr(class="weeklyHours")
+                                    td.compact.leftb.bottomb.rightb(colspan="2" align="right" height="40px")="Weekly hours total:   "
+                                tr(class="dailyHours" id="healthrow")
+                                    td.compact.leftb.bottomb.rightb(colspan="2" align="right" height="40px")="Overall health of team:   "
+                    
+                    
+                    td
+                        table.overflow(id="overview" cellspacing="0")
+                            // Populate table header with information from a single-user date record (dateHeader)
+                            thead
+                                for d in dateHeader.dailyTime 
+                                    th.compact.rightb.bottomb.topb(style="white-space: pre; border-collapse: collapse !important;" align="center" height="38px")=d.desc
+
+                                //- th.compact.bottomb.headcol.leftb.topb(align="center" height="38px") Health    
+                            // Populate table body with user daily time totals
+                            tbody
+                                for name in sorted_usernames
+                                    - numberOfMembers++
+                                    - u = user[name]
+                                    if u.totalTime >= 0
+                                    - timespent = u.totalTime
+                                        tr
+                                            for dt in u.dailyTime
+                                                if dt.timeSpent > 0
+                                                    td.compact.rightb.bottomb(align="center" height="40px")
+                                                        - var individualIssues = dt.worklogs.issue;
+                                                        - var flagged = dt.worklogs.flagged;
+                                                        - var issues = individualIssues
+                                                        if(flagged)
+                                                            a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues).warning-color=dt.timeSpent
+                                                        else
+                                                            a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues)=dt.timeSpent 
+                                                else
+                                                    td.compact.rightb.bottomb(align="center" height="40px") &nbsp;
+
+                                            //-
+                                                if (timespent <= 10){
+                                                td.compact.rightb.bottomb(align="center") 
+                                                    a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues) 😔
+                                                - } else if (timespent > 10 && timespent <= 20) {
+                                                td.compact.rightb.bottomb(align="center")
+                                                    a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues) 😐
+                                                - } else if (timespent > 20 && timespent < 30){
+                                                td.compact.rightb.bottomb(align="center") 
+                                                    a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues) 😀
+                                                - } else if (timespent >= 30){
+                                                 td.compact.rightb.bottomb(align="center") 
+                                                    a(data-toggle="modal" data-target="#taskInfoModal" data-date=dt, data-filename=null, data-issue=issues) 💯
+                                                - } -->
+
+                            // Populate table footer with daily and weekly hour totals
+                            tfoot
+                                - var weekNum = 0
+                                - var weeklyTime = 0
+                                - var weeklyTotals = []
+                                - var users = []
+                                - var found
+                                - var numUsers = 0
+                                - var count = 1 // Used to set weeklyTotal if range doesn't end on a Sunday
+                                tr(class="dailyHours")
+                                    // Iterate thru every date once (dateHeader)
+                                    for d in dateHeader.dailyTime
+                                        - var dailyTotal = 0;
+
+                                        // Iterate thru all user daily time and sum daily total
+                                        for u in user
+                                            - found = false
+                                            //search the users array for the current user
+                                            - for(let i=0; i<users.length; i++)
+                                                -if(u.name === users[i])
+                                                    - found = true
+                                            //If the current user is not already in the array
+                                            - if(found === false)
+                                                //Add current user's name to the array and increment the number of users
+                                                - users[numUsers] = u.name
+                                                -numUsers ++
+                                            for dt in u.dailyTime
+                                                if dt.date == d.date
+                                                    - dailyTotal += dt.timeSpentSeconds
+                                                    - weeklyTime += dt.timeSpentSeconds
+                                                    if (d.endOfWeek.week == d.date || count == totalDays) && u.name === users[numUsers-1]
+                                                        - weeklyTotals[weekNum] = weeklyTime/3600
+                                                        - weekNum ++
+                                                        - weeklyTime = 0
+                                        // If no work completed on a given day, print 0 | else print calculated total for all users
+                                        if dailyTotal == 0
+                                            td.compact.rightb.bottomb(align="center" height = "40px")=" "
+                                        else
+                                            if dailyTotal % 3600 === 0
+                                                td.compact.rightb.bottomb(align="center" height="40px")=(dailyTotal / 3600).toFixed(0)
+                                            else
+                                                td.compact.rightb.bottomb(align="center" height="40px")=(dailyTotal / 3600).toFixed(2)
+                                tr(class="weeklyHours")
+                                    //Used to keep track of the iterations through dateHeader and keep track of what week it's on
+                                    - var count = 1
+                                    // Iterate thru every date once (dateHeader)
+                                    for d in dateHeader.dailyTime
+                                        - var weeklyTotal = weeklyTotals[Math.floor((count-1)/7)]
+                                        // If day is a Sunday, print out weekly total | else if not Sunday, but last day in range print total.
+                                        if d.endOfWeek.week == d.date || count == totalDays
+                                            if weeklyTotal > 0
+                                                if weeklyTotal === 0
+                                                    td.compact.bottomb.rightb(align="center" height="40px")=(weeklyTotal).toFixed(0)
+                                                else
+                                                    td.compact.bottomb.rightb(align="center" height="40px")=(weeklyTotal).toFixed(2)
+                                            else
+                                                td.compact.rightb.bottomb(align="center" height="40px")=" "
+                                        else
+                                            td.compact.bottomb(align="center" height="40px")=" "
+                                        - count++
+                                    //-td.compact.rightb.bottomb(align="center")="h"
+                                tr(class="healthrow")
+                                - if (numberOfMembers == 4){
+                                    - if (totalTimeBetweenUsers < 60){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 😔
+                                    - } else if (totalTimeBetweenUsers >= 60 && totalTimeBetweenUsers < 84){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 😐
+                                    - } else if (totalTimeBetweenUsers >= 84 && totalTimeBetweenUsers < 120){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 😀
+                                    - } else if (totalTimeBetweenUsers >= 120){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 💯
+                                    - } 
+                                - } else {
+                                    - minimumTimePerSprint = (numberOfMembers * 30);
+                                    - if (totalTimeBetweenUsers < (minimumTimePerSprint * .50)){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 😔
+                                    - } else if (totalTimeBetweenUsers >= (minimumTimePerSprint * .50) && totalTimeBetweenUsers < (minimumTimePerSprint * .70)){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 😐
+                                    - } else if (totalTimeBetweenUsers >= (minimumTimePerSprint * .70) && totalTimeBetweenUsers < (1 * minimumTimePerSprint)){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 😀
+                                    - } else if (totalTimeBetweenUsers >= minimumTimePerSprint){
+                                    td.compact.bottomb.rightb(class="dailyHours" colspan="50" align="center" height="40px") 💯
+                                    - } 
+                                - }
+
+        // Table with task/issue related information
+        br
+        br
+        br
+        div
+            table(id="task" class="display" width="100%")
+                thead
+                    th Key
+                    th Status
+                    th Time (h)
+                    th Summary
+                tbody
+                    for t in task
+                        tr
+                            td=t.key
+                            td=t.status
+                            td=t.seconds
+                            td=t.summary
+
+        // Shared modal the displays dynamic information for each worklog on a given day
+        div(class="modal" id="taskInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskInfoModalLabel" aria-hidden="true")
+            div.modal-dialog.modal-lg
+                div.modal-content
+                    div.modal-header
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                        h4.modal-title(id="taskInfoModalLabel") More Details
+                    div.modal-body
+                    div.modal-footer
+                        button(type="button" class="btn btn-default" data-dismiss="modal") Back
+
+        script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=', crossorigin='anonymous')
+        script(type="text/javascript" src="modalsonly/js/bootstrap.min.js")
+        script(type="text/javascript" src="custom.js")
+        script(type="text/javascript" src="dateConverter.js")
+        //script(type="text/javascript" src="/datepicker.js")
+        script(type="text/javascript" src=alljs, data-options="sizeToParent:true")
+
+

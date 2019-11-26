@@ -1,0 +1,52 @@
+debug: desriptor::noPath = TypeError: "callback" argument must be a function
+info: add-on install url = https://09665778.ngrok.io/atlassian-connect.json
+info: lifecycle installed received from ea311dc6-3da7-3ca3-b15b-9db01e56759e
+info: wrote client data for ea311dc6-3da7-3ca3-b15b-9db01e56759e
+info: lifecycle enabled received from ea311dc6-3da7-3ca3-b15b-9db01e56759e
+debug: search with req.params = {"clientKey":"ea311dc6-3da7-3ca3-b15b-9db01e56759e"}
+debug: search with req.body = {}
+debug: find secret in repository for ea311dc6-3da7-3ca3-b15b-9db01e56759e
+debug: qsh::canonicalRequest = POST&/rest/api/latest/search&
+debug: payload = {"fieldsByKeys":false}
+debug: json = {"fieldsByKeys":false}
+debug: options = {"method":"POST","headers":{"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20uZGV2cGFydGlzYW4uZXhhbXBsZS5qaXJhLnNlYXJjaCIsImlhdCI6MTQ4NjMzODUxNCwiZXhwIjoxNDg2MzM
+4NTI0LCJxc2giOiJjMGQzY2VkZDQ4YWZhYTZiMWMyNDgzNzNjMDNmMDQzN2MzMzUzNWY3NzFjYmY1NTViOTBlZWQ1MTBmNTg3ZjQxIn0.vjsR1Le4ZrBvNAIW5c10xdrJkJOccNG8DSbm3nZDkWA"},"url":"https://robersj.atlassian.net/rest/api/lates
+t/search","json":{"fieldsByKeys":false}}
+REQUEST { method: 'POST',
+  headers: { Authorization: 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20uZGV2cGFydGlzYW4uZXhhbXBsZS5qaXJhLnNlYXJjaCIsImlhdCI6MTQ4NjMzODUxNCwiZXhwIjoxNDg2MzM4NTI0LCJxc2giOiJjMGQzY2VkZDQ4YWZh
+YTZiMWMyNDgzNzNjMDNmMDQzN2MzMzUzNWY3NzFjYmY1NTViOTBlZWQ1MTBmNTg3ZjQxIn0.vjsR1Le4ZrBvNAIW5c10xdrJkJOccNG8DSbm3nZDkWA' },
+  url: 'https://robersj.atlassian.net/rest/api/latest/search',
+  json: { fieldsByKeys: false },
+  callback: [Function] }
+REQUEST make request https://robersj.atlassian.net/rest/api/latest/search
+REQUEST onRequestResponse https://robersj.atlassian.net/rest/api/latest/search 200 { server: 'nginx',
+  date: 'Sun, 05 Feb 2017 23:48:41 GMT',
+  'content-type': 'application/json;charset=UTF-8',
+  'transfer-encoding': 'chunked',
+  connection: 'close',
+  vary: 'Accept-Encoding',
+  'x-arequestid': '1068x4188x1',
+  'x-ausername': 'addon_com.devpartisan.example.jira.search',
+  'x-atenant-id': 'robersj.atlassian.net',
+  'cache-control': 'no-cache, no-store, no-transform',
+  'x-content-type-options': 'nosniff',
+  'set-cookie': [ 'atlassian.xsrf.token=B2GX-OSE1-LEWO-OSEH|73803a0ed5882a9fdf3ce90dcfa2e41f036396f8|lin; Path=/; Secure' ],
+  'strict-transport-security': 'max-age=315360000;includeSubDomains' }
+REQUEST reading response's body
+REQUEST finish init function https://robersj.atlassian.net/rest/api/latest/search
+REQUEST response end https://robersj.atlassian.net/rest/api/latest/search 200 { server: 'nginx',
+  date: 'Sun, 05 Feb 2017 23:48:41 GMT',
+  'content-type': 'application/json;charset=UTF-8',
+  'transfer-encoding': 'chunked',
+  connection: 'close',
+  vary: 'Accept-Encoding',
+  'x-arequestid': '1068x4188x1',
+  'x-ausername': 'addon_com.devpartisan.example.jira.search',
+'x-atenant-id': 'robersj.atlassian.net',
+  'cache-control': 'no-cache, no-store, no-transform',
+  'x-content-type-options': 'nosniff',
+  'set-cookie': [ 'atlassian.xsrf.token=B2GX-OSE1-LEWO-OSEH|73803a0ed5882a9fdf3ce90dcfa2e41f036396f8|lin; Path=/; Secure' ],
+  'strict-transport-security': 'max-age=315360000;includeSubDomains' }
+REQUEST end event https://robersj.atlassian.net/rest/api/latest/search
+REQUEST has body https://robersj.atlassian.net/rest/api/latest/search 102009
+REQUEST emitting complete https://robersj.atlassian.net/rest/api/latest/search

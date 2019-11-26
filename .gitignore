@@ -1,0 +1,17 @@
+.env
+node_modules
+.idea
+npm-debug.log
+coverage
+atlassian-connect.json
+./public/atlassian-connect.json
+abouttime.log
+/.ebextensions/SSL-Setup.config
+
+# Elastic Beanstalk Files
+
+.elasticbeanstalk/*
+
+!.elasticbeanstalk/*.cfg.yml
+
+!.elasticbeanstalk/*.global.yml

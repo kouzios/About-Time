@@ -1,0 +1,303 @@
+html
+    head 
+        // Press F to pay respects
+        // F
+        //
+        //
+        //NOTE: The CSS file no longer works with this file, for some unknown reason, so all formatting is done using PUG formatting 'style'. All instances of Class should be ignored
+        //
+        //
+        link(rel="stylesheet" type="text/css" href="/preview.css")
+        link(rel="stylesheet" href="modalsonly/css/bootstrap.css")
+        title= title
+    body
+        //This variables are for the health metrics section of the PDF
+        - var totalTimeBetweenUsers = 0;
+        - var numberOfMembers = 0;
+        - var minimumTimePerSprint = 0;
+        - var firstDayOfSprint = "";
+        for d in dateHeader.dailyTime
+            - firstDayOfSprint = d.date
+            - break 
+        - var today = new Date();
+        - today = today.toString();
+        - var date1 = new Date(firstDayOfSprint);
+        - var date2 = new Date(today);
+        - var expectedTime = 0;
+        - var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        - var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        - if (diffDays > 21){
+            - diffDays = 21
+            - expectedTime = (diffDays * 1.42857142857).toFixed(2)
+        - } else if (diffDays === 21){
+            - expectedTime = (diffDays * 1.42857142857).toFixed(2)
+        - } else if (diffDays > 0 && diffDays < 21) {
+            - expectedTime = (diffDays * 1.42857142857).toFixed(2)
+        - } else if (diffDays === 0) {
+            - expectedTime = 0
+        - } else {
+            - expectedTime = 0
+        - }
+        //Variable for weekly total columns
+        - var weeklyCount = 1;
+        //Variables to handle task table page breaks
+        - var taskCount = 0;
+        - var preTasksCount = 0;
+        - var pageCount = 1;
+        - var teamMembers = 0;
+        //This is a simple label that denotes the start of the PDF
+        label() Sprint Print View for: 
+        label()=projectTitle
+        br
+        //This is the key for the health metrics emojis. It will not appear if it is hidden on the view logs page when the button is pressed for this page
+        if healthMetricEnabled1 == "true"
+            - preTasksCount = preTasksCount + 6;
+            div(align="center")
+                label() Health Metric Key
+                p(id="healthKey" style="white-space:pre; color:black; border:6px solid #0064ff; height:102px; width:650px") 
+                        | Individual Health Key (x = (daysIntoTheSprint * 1.4)):
+                        | 😔: < 50% x | 😐: 50% ≤ x < 70% | 😀 70% ≤ x < 100% | 💯: 100% ≤ x
+                        | 
+                        | Team Health Key (Sprint-long basis):
+                        | 😔: < 50% hours | 😐: 50% ≤ hours < 70% | 😀 70% ≤ hours < 100% | 💯: 100% ≤ hours
+        
+        if healthMetricEnabled2 == "true"
+            div(align="center")
+                label() Warnings:
+                br
+                for warning in warnings
+                    label()=warning
+                    - preTasksCount++;
+                    br
+        
+        div(style="padding-bottom: 50px; width: 100%;" align="center" id="table_container")
+            for table in tables
+                div.time-table
+                    table.hide_overflow(cellspacing="0" align="center")
+                        tr
+                            td(align="right")
+                                table(id='left' cellspacing="0" width="280px")
+                                    //These are the headers for the first part of the logged times table
+                                    thead
+                                        th.compact.bottomb.headcol.leftb(align="center" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" height="44px") Names
+                                        th.compact.leftb.bottomb(align="center" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" height="44px") Σ
+                                    //This is where usernames will be displayed with the respective user's total logged time
+                                    tbody
+                                        for name in sorted_usernames
+                                            - u = table[name]
+                                            if u.totalTime >= 0
+                                                tr
+                                                    //Here the user's username is added to the table
+                                                    td.compact.bottomb.leftb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=u.name
+                                                    //This section determines what emojis to use depending on the total time for the user and also displays the user's total time
+                                                    - if (u.totalTime < (.50 * expectedTime)){
+                                                        td.compact.leftb.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")
+                                                            a(align="center" height = "40px")=(u.totalTime + " 😔")
+                                                    - } else if (u.totalTime >= (.50 * expectedTime) && u.totalTime < (.70 * expectedTime)){
+                                                        td.compact.leftb.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")
+                                                            a(align="center" height = "40px")=(u.totalTime +  " 😐")
+                                                    - } else if (u.totalTime >= (.70 * expectedTime) && u.totalTime < (1 * expectedTime)){
+                                                        td.compact.leftb.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")
+                                                            a(align="center" height = "40px")=(u.totalTime + " 😀")
+                                                    - } else if (u.totalTime >= (1 * expectedTime) || u.totalTime >= 30){
+                                                        td.compact.leftb.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")
+                                                             a(align="center" height = "40px")=(u.totalTime + " 💯")
+                                                    - }
+                                                    - totalTimeBetweenUsers += parseFloat(u.totalTime)
+                                    //This section adds row labels for the table that displays day-by-day times
+                                    tfoot
+                                        tr(class="dailyHours")
+                                            td.compact.leftb.bottomb(colspan="2" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" align="right")="Daily hours total:   "
+                                        tr(class="weeklyHours")
+                                            td.compact.leftb.bottomb(colspan="2" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" align="right")="Weekly hours total:   "
+                                        tr
+                                            td.compact.leftb.bottomb(colspan="2" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" align="right")="Overall health of team:    "
+                            td
+                                table.overflow(id="overview" cellspacing="0")
+                                    // Populate table header with information from a single-user date record (dateHeader)
+                                    - count = 0;
+                                    thead
+                                        for d in table.dateHeader.dailyTime
+                                            th.compact.rightb.bottomb.topb(style="white-space: pre; border-collapse: collapse !important; background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" align="center" height="38px")=d.desc
+                                            - count++;
+                                    // Populate table body with user daily time totals
+                                    tbody
+                                        for name in sorted_usernames
+                                            - teamMembers = teamMembers + 1;
+                                            - u = table[name]
+                                            - count = 0
+                                            - numberOfMembers++
+                                            if u.totalTime >= 0
+                                                tr
+                                                    for dt in u.dailyTime
+                                                        if dt.timeSpent > 0
+                                                            td.compact.rightb.bottomb(align="center" style="border-collapse: collapse !important; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb" data-user=name)
+                                                                - var individualIssues = dt.worklogs.issue;
+                                                                - var flagged = dt.worklogs.flagged;
+                                                                - var issues = "<ul>" + individualIssues + "</ul>"
+                                                                if(flagged)
+                                                                    a(data-toggle="modal" data-target="#taskInfoModal" style="color:#c13500" data-date=dt, data-filename=null, data-issue=issues)=dt.timeSpent
+                                                                else
+                                                                    a(data-toggle="modal" data-target="#taskInfoModal" style="color:Black" data-date=dt, data-filename=null, data-issue=issues)=dt.timeSpent
+                                                        else
+                                                            td.compact.rightb.bottomb(align="center" style="border-collapse: collapse !important; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") &nbsp;
+                                                        - count++;
+                                    // Populate table footer with daily and weekly hour totals
+                                    tfoot
+                                        tr(class="dailyHours")
+                                            // Iterate thru every date once (dateHeader)
+                                            for d in table.dateHeader.dailyTime
+                                                - var dailyTotal = 0
+                                                // Iterate thru all user daily time and sum daily total
+                                                for u in table
+                                                    for dt in u.dailyTime
+                                                        if dt.date == d.date
+                                                            - dailyTotal += dt.timeSpentSeconds
+                                                // If no work completed on a given day, print 0 | else print calculated total for all users
+                                                if dailyTotal == 0
+                                                    td.compact.rightb.bottomb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") &nbsp;
+                                                else
+                                                    if dailyTotal % 3600 === 0
+                                                        td.compact.rightb.bottomb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=((dailyTotal / 3600.0) / 2.0).toFixed(0)
+                                                    else
+                                                        td.compact.rightb.bottomb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=((dailyTotal / 3600.0) / 2.0).toFixed(2)
+                                        tr(class="weeklyHours")
+                                            // Iterate thru every date once (dateHeader)
+                                            for d in table.dateHeader.dailyTime
+                                                - var weeklyTotal = 0
+                                                // Iterate thru all user daily time and sum to weekly total if day is in week
+                                                for u in table
+                                                    for dt in u.dailyTime
+                                                        if dt.endOfWeek.week == d.endOfWeek.week
+                                                            - weeklyTotal += dt.endOfWeek.weekTime
+                                                //If the current date is Sunday
+                                                if d.endOfWeek.week == d.date
+                                                    if weeklyTotal / 3600 > 0
+                                                        if weeklyTotal % 3600 === 0
+                                                            //If it is the start of the week or it is the end of this section of the table (each section is 21 columns of time data)
+                                                            if weeklyCount == 1 || weeklyCount % 22 === 0
+                                                                td.compact.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=((weeklyTotal / 3600.0) / 2.0).toFixed(0)
+                                                            else
+                                                                td.compact.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb")=((weeklyTotal / 3600.0) / 2.0).toFixed(0)
+                                                        else
+                                                            //If it is the start of the week or it is the end of this section of the table (each section is 21 columns of time data)
+                                                            if weeklyCount == 1 || weeklyCount % 22 === 0
+                                                                td.compact.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=((weeklyTotal / 3600.0) / 2.0).toFixed(2)
+                                                            else
+                                                                td.compact.bottomb.rightb(align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb")=((weeklyTotal / 3600.0) / 2.0).toFixed(2)
+                                                    else
+                                                        td.compact.bottomb(d style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb") &nbsp;
+                                                else
+                                                    //If the current date is not Sunday
+                                                    //If it is the end of this section or it is the end of the sprint
+                                                    if weeklyCount % 21 === 0 || weeklyCount == totalDays
+                                                        if weeklyCount == totalDays && weeklyCount % 22 === 0
+                                                            td.compact.bottomb(style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") &nbsp;
+                                                        else
+                                                            td.compact.bottomb(style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb") &nbsp;
+                                                    else if weeklyCount == 1 || weeklyCount % 22 === 0
+                                                        //If it is the start of this section
+                                                        td.compact.bottomb(style="border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") &nbsp;
+                                                    else
+                                                        td.compact.bottomb(style="border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb") &nbsp;
+                                                - weeklyCount++
+                                        tr
+                                            //This section determines the emojis to be used depending on the total time for the team and the total number of team members
+                                            - if (numberOfMembers == 4){
+                                                - if (totalTimeBetweenUsers < 60){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 😔
+                                                - } else if (totalTimeBetweenUsers >= 60 && totalTimeBetweenUsers < 84){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 😐
+                                                - } else if (totalTimeBetweenUsers >= 84 && totalTimeBetweenUsers < 120){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 😀
+                                                - } else if (totalTimeBetweenUsers >= 120){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 💯
+                                                - } 
+                                            - } else {
+                                                - minimumTimePerSprint = (numberOfMembers * 30);
+                                                - if (totalTimeBetweenUsers < (minimumTimePerSprint * .50)){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 😔
+                                                - } else if (totalTimeBetweenUsers >= (minimumTimePerSprint * .50) && totalTimeBetweenUsers < (minimumTimePerSprint * .70)){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 😐
+                                                - } else if (totalTimeBetweenUsers >= (minimumTimePerSprint * .70) && totalTimeBetweenUsers < (1 * minimumTimePerSprint)){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 😀
+                                                - } else if (totalTimeBetweenUsers >= minimumTimePerSprint){
+                                                    td.compact.bottomb.rightb(colspan="50" align="center" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") 💯
+                                                - } 
+                                            - }
+        //This table shows all PBIs that were included in this sprint, the PBIs' descriptions, and the total time spent on the PBIs
+        div(style="padding-bottom: 50px; width: 100%;" align="center" id="task_container")
+            table(id='task' cellspacing="0")
+                //The headers for the table are set up here
+                //thead
+                //The content of the table is added here
+                tbody
+                    - var numberOfBlocks = 1;
+                    while weeklyCount > 0
+                        - weeklyCount = weeklyCount - 22;
+                        //th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=weeklyCount
+                        if weeklyCount / 22 >= 0
+                            - numberOfBlocks = numberOfBlocks + 1;
+                            - preTasksCount = preTasksCount + 7;
+                            //th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=weeklyCount
+                    if numberOfBlocks == 1
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Key
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Status
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Time (h)
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Summary
+                        - preTasksCount = preTasksCount + 4;
+                    else if numberOfBlocks == 2
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Key
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Status
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Time (h)
+                        th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Summary
+                        - preTasksCount = preTasksCount + 3;
+                    else if numberOfBlocks == 3
+                        if healthMetricEnabled1 == "true"
+                            tr
+                            td.compact.bottomb(height="28px") &nbsp;
+                            - preTasksCount = preTasksCount + 1;
+                        else
+                            th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Key
+                            th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Status
+                            th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Time (h)
+                            th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Summary
+                            - preTasksCount = preTasksCount + 1;
+                    else
+                        
+                    //th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#00f4ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=preTasksCount
+                    for t in task
+                        - taskCount++;
+                        if pageCount == 1
+                            if (taskCount + preTasksCount) % 22 === 0
+                                tr
+                                td.compact.bottomb(height="28px") &nbsp;
+                                tr
+                                td.compact.bottomb(height="28px") &nbsp;
+                                tr
+                                td.compact.bottomb(height="28px") &nbsp;
+                                tr
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Key
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Status
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Time (h)
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Summary
+                                - taskCount = 0;
+                                - pageCount++;
+                        else                            
+                            if taskCount % 25 === 0
+                                tr
+                                td.compact.bottomb(height="28px") &nbsp;
+                                tr
+                                td.compact.bottomb(height="28px") &nbsp;
+                                tr
+                                td.compact.bottomb(height="28px") &nbsp;
+                                tr
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Key
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Status
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Time (h)
+                                th.bottomb.headcol.leftb.topb(align="center" height="38px" style="background:#0064ff; color:White; border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb") Summary
+                        tr
+                            td.bottomb(align="center" height="28px" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=t.key
+                            td.bottomb(align="center" height="28px" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=t.status
+                            td.bottomb(align="center" height="28px" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=t.seconds
+                            td.bottomb(align="center" height="28px" style="border-right:solid 1px #bbbbbb; border-bottom: solid 1px #bbbbbb; border-top: solid 1px #bbbbbb; border-left: solid 1px #bbbbbb")=t.summary

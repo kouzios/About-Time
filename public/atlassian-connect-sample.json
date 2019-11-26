@@ -1,0 +1,41 @@
+{
+  "name": "About Time",
+  "description": "Atlassian Connect add-on",
+  "key": "edu.msoe.abouttime",
+  "baseUrl": "https://www.t00ter.com",
+  "vendor": {
+    "name": "Milwaukee School of Engineering",
+    "url": "http://msoe.edu"
+  },
+  "authentication": {
+    "type": "jwt"
+  },
+  "scopes": [
+    "read",
+    "write"
+  ],
+  "apiVersion": 2,
+  "lifecycle": {
+    "installed": "/installed",
+    "uninstalled": "/uninstalled",
+    "enabled": "/enabled",
+    "disabled": "/disabled"
+  },
+  "modules": {
+    "generalPages": [
+      {
+        "url": "/main",
+        "key": "abouttime-general",
+        "location": "system.top.navigation.bar",
+        "name": {
+          "value": "About Time"
+        },
+        "icon": {
+          "url": "/images/hourglass.png",
+          "width": 20,
+          "height": 20
+        }
+      }
+    ]
+  }
+}

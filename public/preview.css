@@ -1,0 +1,332 @@
+h1, img {
+    display: inline-block;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+td a:hover, button:not(.close):hover, button:not(.close):active {
+    color: #3549e0;
+    background-color: #00388c !important;
+}
+
+th.compact.rightb.bottomb, th.compact.bottomb.headcol, th {
+    color: #3d53ff;
+    background-color: #00388c !important;
+}
+.modal-body a {
+    color: #3d53ff;
+    text-decoration: underline;
+}
+
+.compact {
+    /*padding-left: 3px !important;
+    padding-right: 3px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;*/
+    padding: 3px !important;
+    margin: 0px !important;
+    /*background-color: rgb(245, 245, 245);*/
+}
+
+.rightb {
+    border-right: solid 2px #bbbbbb;
+}
+
+.leftb {
+    border-left: solid 2px #bbbbbb;
+}
+
+.topb {
+    border-top: solid 2px #bbbbbb;
+}
+
+.bottomb {
+    border-bottom: solid 2px #bbbbbb;
+}
+
+tfoot {
+    border-top: 1px solid black;
+}
+
+table {
+    float: left;
+    /*display: block;*/
+    /*width: 100%;*/
+    margin-top: 10px;
+}
+
+td, th {
+    min-width: 40px;
+}
+
+.time-table{
+    width: 100%;
+    display: inline-block;
+}
+
+.overflow {
+    max-width: 720px;
+    /*overflow-x: auto;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+html {
+    overflow: scroll;
+    /*overflow-x: hidden;*/
+}
+/*::-webkit-scrollbar {*/
+/*width: 0px;  !* remove scrollbar space *!*/
+/*height: 0px;*/
+/*background: transparent;  !* optional: just make scrollbar invisible *!*/
+/*}*/
+
+
+/* change the font */
+* {
+    font-family: roboto, arial, sans-serif;
+}
+
+/* pageify (centered, drop shadow, etc.) log */
+body {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+}
+
+/*.overflow {*/
+/*max-width: 850px;*/
+/*}*/
+
+html {
+    text-align: center;
+    padding: 1em;
+}
+
+/* end pageify */
+
+/* align details display column headings with text for cleaner display */
+#task * th {
+    text-align: left;
+}
+
+/* adjust heading spacing */
+h1 {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    padding-bottom: .3em;
+    /* add gray divider */
+    border-bottom: .2em solid #d5d5d5;
+    min-width: 800px;
+}
+
+/* increase td spacing */
+.compact, .modal-body * td {
+    padding: 0.5em .3em !important;
+}
+
+/* maintain vertical positioning */
+th.compact {
+    height: 4em;
+}
+
+table.hide_overflow > tbody > tr > td {
+    /* allows for scrollbar */
+    vertical-align: top;
+}
+
+/* end maintain vertical positioning */
+
+/* change buttons from default styling */
+button:not(.close) {
+    border-radius: .2em;
+    background-color: #555555;
+    padding: 1em;
+    border: none;
+    color: white;
+    box-shadow: 0em .1em .4em #b4b4b4;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    /*-ms-transition: all .5s;*/
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+
+button:not(.close):hover {
+    box-shadow: 0em .4em .6em #747474;
+    color: white;
+
+    /* make cursor the hand to communicate clickability */
+    cursor: pointer;
+}
+
+button:not(.close):active {
+    color: white;
+}
+
+/* end general button styling */
+
+/* adjust popup window close button size */
+/*button.close {*/
+/*padding: .5em;*/
+/*}*/
+
+/* make export button float on the right side to not take up more screen
+    real estate, increase size and adjust font for legibility */
+form button {
+    margin-left: auto;
+    margin-right: auto;
+    padding: .5em !important;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+/* table striping */
+tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+:not(thead) > tr:nth-child(odd) {
+    background-color: #fbfbfb;
+}
+
+/* end table striping */
+
+/* add row hover effect */
+tr {
+    -webkit-transition: all .5s !important;
+    -moz-transition: all .5s !important;
+    /*-ms-transition: all .5s !important;*/
+    -o-transition: all .5s !important;
+    transition: all .5s !important;
+}
+
+th.compact.rightb.bottomb, th.compact.bottomb.headcol, th{
+    color: white;
+}
+
+.dailyHours{
+    background-color: #f0f0f0 !important;
+}
+.weeklyHours{
+    background-color: #f0f0f0 !important;
+}
+
+:not(thead) > tr:hover {
+    background-color: #d0d0d0;
+}
+
+thead, thead tr {
+    background-color: #e0e0e0;
+}
+
+table.hide_overflow > tbody > tr:hover {
+    background-color: #fbfbfb;
+}
+
+/* end row hover effect */
+
+/* visible table cell padding (does not affect alignment table)*/
+table * table td, table * table th, .display * td, .display * th, .modal-body * th {
+    padding: .5em;
+}
+
+/* add clickable td hover effect */
+td a {
+    cursor: pointer;
+    display: block;
+    text-decoration: none !important;
+    background-color: transparent;
+    padding: .5em .3em;
+    margin: -.5em -.3em;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    /*-ms-transition: all .5s;*/
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+
+td a:hover {
+    color: white;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px solid black;
+}
+
+.inline {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.h1 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    font-size: 16px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+#nextWeek:hover, #lastWeek:hover, #refresh:hover {
+    color: #000000 !important;
+    background-color: #FBFBFB !important;
+    border-color: #666666 !important;
+}
+#nextWeek, #lastWeek, #refresh {
+    outline: none;
+    /*margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 12px;
+    margin-right: 10px;*/
+    display: inline;
+    /*width: 150px;
+    height: 32px;*/
+}
+#nextWeek, #lastWeek, #refresh {
+    color: #222222;
+    background-color: white;
+    border-color: #888888;
+}
+
+.inline {
+    display: inline-block;
+}
+
+/* end clickable td hover effect */
+
+
+
+.table-wrapper {
+    height: 8.5in;
+}

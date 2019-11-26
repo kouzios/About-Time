@@ -1,0 +1,366 @@
+body {
+  padding: 20px 20px 0px 20px !important;
+}
+
+.mtl--wrapper {
+  padding: 20px 30px 0px 20px;
+}
+
+#dialog-confirm {
+  z-index: 9999 !important;
+}
+
+#footer {
+  bottom: 0;
+  height: 50px !important;
+  width: 100%;
+}
+
+#show {
+  color: black !important;
+  border-color: black !important;
+}
+
+.projectColor {
+  color: #00388c !important;
+  border-color: #00388c !important;
+}
+
+.projectAccent {
+  color: #8c3800 !important;
+  border-color: #8c3800 !important;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 30pt;
+}
+h2 {
+  font-weight: 600;
+}
+.dropDownLabel {
+  font-size: 14pt;
+  margin-top: 5px;
+}
+
+#clock{
+  position:absolute;
+  left: -100px;
+  top: -700px;
+  overflow:hidden;
+  opacity: 0.1;
+}
+#clockDiv{
+  z-index: -1;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.weekInputDiv{
+  width:20px;
+  float:left;
+}
+.weekOptionLabelDiv{
+  left:6px;
+  width:200px;
+}
+.error {
+  color: #ff0000;
+}
+
+.success {
+  color: #3ba833;
+}
+
+form {
+  margin-top: 20px;
+}
+
+#sprintList:hover, #projectList:hover, #selectSpace:hover{
+  border-color: #888888 !important;
+  cursor: pointer;
+}
+
+#showTable:hover{
+  opacity: 1;
+  cursor: pointer;
+}
+
+#sprintList, #projectList,#selectSpace {
+  width: 500px;
+}
+#from, #to{
+  width: 200px
+}
+
+#generateReportStatus {
+  display: none;
+  margin-left: 12px;
+  width: 100%;
+}
+
+#space_select {
+  display: none;
+}
+
+form button, button {
+  margin-top: 10px;
+  display: inline;
+  width: 100px;
+  height: 32px;
+  background-color: white;
+  border: 1px solid black;
+}
+#timeview_btn{
+  width: 200px;
+  height: 32px;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 12px;
+  margin-right: 10px;
+  display: inline;
+}
+
+#report_btn{
+  outline: none;
+  margin-bottom: 15px;
+  margin-left: 12px;
+  margin-right: 10px;
+  display: inline;
+  width: 175px;
+  height: 32px;
+}
+#show{
+  outline: none;
+  margin-bottom: 15px;
+  margin-left: 12px;
+  margin-right: 10px;
+  display: inline;
+  width: 175px;
+  height: 32px;
+  background-color: #ffffff;
+}
+
+#instructorViewForm {
+  margin-top: 0px !important;
+}
+
+#date_btn:hover, #sprint_btn:hover, #report_btn:hover, #timeview_btn:hover, #editreport_btn:hover, #report_cancel_btn:hover, #instructorView:hover, #addProject:hover, #removeProject:hover, #viewAll:hover, #studentView:hover, #nextWeek:hover, #lastWeek:hover, #refresh:hover, #instructions_button:hover, #about_button:hover  {
+  color: #000000 !important;
+  background-color: #FBFBFB !important;
+  border-color: #666666 !important;
+}
+
+#instructorView {
+  outline: none;
+  margin-top: 0px !important;
+  margin-bottom: 15px;
+  margin-left: 12px;
+  margin-right: 10px;
+  display: inline;
+  width: 150px;
+  height: 32px;
+}
+
+#date_btn, #sprint_btn, #editreport_btn, #newreport_btn, #addProject, #removeProject, #viewAll, #studentView, #nextWeek, #lastWeek, #refresh, #bug_submit_button, #bug_cancel_button, #instructions_button, #about_button
+{
+  outline: none;
+  margin-bottom: 10px;
+  margin-left: 12px;
+  margin-right: 10px;
+  display: inline;
+  width: 150px;
+  height: 32px;
+}
+#date_btn, #sprint_btn, #report_btn, #timeview_btn, #newreport_btn, #editreport_btn, #instructorView, #addProject, #removeProject, #viewAll, #studentView, #nextWeek, #lastWeek, #refresh, #bug_submit_button, #bug_cancel_button, #instructions_button, #about_button {
+  color: #222222;
+  background-color: white;
+  border-color: #888888;
+}
+
+#newreport_btn {
+  margin-left: -0.5px;
+  background-color: #ffffff;
+}
+
+#report_btn, #timeview_btn {
+  margin-top: -10px;
+}
+
+tr {
+  margin-top: 10px;
+}
+
+.mtl--row {
+  display: flex;
+  margin-top: 10px;
+  width: 400px;
+}
+
+gen-row {
+  display: flex;
+  margin-top: 10px;
+}
+
+.mtl--col-label {
+  flex: 0 150px;
+}
+
+.mtl--col-val {
+  flex: 1 auto;
+}
+
+.mtl--col-val input {
+  width: 100%;
+  border: 1px solid #AAA;
+  background-color: white;
+}
+
+.tableIcon {
+  opacity: 0.4;
+  margin-left: 10px;
+  /* Other styles here */
+}
+
+#submit_bug_btn{
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: inline;
+  background-color: #ffffff;
+}
+
+#showAllProjects {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin:0;
+  margin-bottom: 6.5px;
+  margin-left: 5px;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  *overflow: hidden;
+}
+
+#preview_buttons {
+  display: none;
+  right: 10px;
+  top: 0;
+  position: fixed;
+}
+
+#preview_cancel{
+  float: right;
+  outline: none;
+  background-color: white;
+}
+
+#preview_confirm {
+  float: right;
+  outline: none;
+  background-color: white;
+  width: 150px;
+  margin-left: 10px;
+}
+
+#generateReportFromPreview {
+  margin-top: 10px;
+}
+
+#previewTable td, #previewTable th {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.cmn-t-pulse {
+  color: #fff;
+  background-color: #ff3296;
+  animation: pulse 3s ease infinite;
+  /* transition: transform 0.2s; */
+}
+.cmn-t-pulse:hover {
+  color: #000000;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  margin: 5% auto 15% auto;
+  width: 80%; /* Could be more or less, depending on screen size */
+  border: 5px solid #888;
+}
+
+.bug_inputs{
+  margin: 5% 5% 5% 5%;
+}
+
+.instructions, .about{
+  margin: 2.5% 2.5% 2.5% 2.5%;
+  align-content: center;
+  align-items: center;
+}
+
+#addItemImage{
+  width: 25%;
+  height: auto;
+}
+
+#addShortcutImage{
+  width: 50%;
+  height: auto;
+}
+
+#addonURL{
+  font-size: large;
+}
+
+.message {
+  margin-top: 10px;
+  max-width: 350px;
+}
+#sprintR, #customTimeR{
+  margin-left: 10px;
+  font-size:large;
+}
+#sprintRLabel, #customTimeRLabel{
+  margin-top: 5px;
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+/* This is to allow people to copy/paste the page and not worry about how the chart doesn't copy */
+#burndown_section text{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

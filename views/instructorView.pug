@@ -1,0 +1,138 @@
+// @author griggszm@msoe.edu
+//         kouziosma@msoe.edu
+
+html
+    head
+        // Note: This isn't very useful, but does allow us to easily add this feature later if we really have to
+        - usingSprintForm = true
+        link(rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+        link(rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.12/css/aui.min.css" media="all")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/main.css")
+        link(rel="stylesheet" href="/dashboard.css")
+
+    body.mtl--wrapper
+        h1(id="title" class="projectColor") AboutTime
+        h2(id="title_label" class="projectColor") Dashboard View
+        h3.error=error
+
+//button(id="showAllProjects" name="showAllProjects") Show All Projects
+form(method="POST" action="/saveprojects" id="hiddenform")
+    div.mtl--row
+        div.mtl--col-proj
+            input.form-control.input-lg(style="display:none;" type="text" id="projectArray" name="projectArray" value=projsListTextbox)
+            input.form-control.input-lg(style="display:none;" type="text" id="sprintTo" name="sprintTo" value="")
+            input.form-control.input-lg(style="display:none;" type="text" id="sprintFrom" name="sprintFrom" value="")
+            input.form-control.input-lg(style="display:none;" type="text" id="displayName" name="displayName" value="")
+            input.form-control.input-lg(style="display:none;" type="text" id="selectedTimebox" name="selectedTimebox" value="Current Sprint")
+            input.form-control.input-lg(style="display:none;" type="text" id="sprintArray" name="sprintArray" value="")
+
+nav.navbar.navbar-default(style="min-height: 70px")
+    .container-fluid
+        #timeperiod-navigation
+            ul.nav.navbar-nav(style="width:100%")
+                li.dropdown
+                    a.dropdown-toggle(href='#' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false' style='margin-top:8px')
+                        | Time Period 
+                        span.caret
+                    ul.dropdown-menu
+                        li(style="margin-left: 5px")
+                            input(type="radio" name="timebox" id="radio_current_sprint" value="Current Sprint" checked)
+                            label(style="margin-left: 5px;font-weight: normal !important")
+                                | Current Sprint
+                        li(style="margin-left: 5px")
+                            input(type="radio" name="timebox" id="radio_custom_date" value="Custom Date")
+                            label(style="margin-left: 5px;font-weight: normal !important")
+                                | Custom Date
+                .li
+                    .col-sm-4
+                        .form-group
+                            label.control-label.requiredField(for="fromDashboard" class="dropDownLabel")
+                                span(style="font-weight:normal !important;margin-right: 5px")
+                                    | Start Date
+                                span.glyphicon.glyphicon-calendar
+                            .col-xs-12(style="padding-left:0!important")
+                                input.form-control.input-lg(style="height:0;font-size:14px" type="text" id="fromDashboard" name="from" autocomplete="off" disabled)
+                .li
+                    .col-sm-4
+                        .form-group
+                            label.control-label.requiredField(for="toDashboard" class="dropDownLabel")
+                                span(style="font-weight:normal !important;margin-right:5px")
+                                    | End Date
+                                span.glyphicon.glyphicon-calendar
+                            .col-xs-12(style="padding-left:0!important")
+                                input.form-control.input-lg(style="height:0;font-size:14px" type="text" id="toDashboard" name="to" autocomplete="off" disabled)
+                div.btn.btn-primary(type="button" style="float: right !important;margin-top:20px" data-toggle='modal', data-target='#myprojects_modal')
+                    | My Projects
+                div.btn(type="button" style="background-color: lightgrey;float: right !important;margin-top:20px;margin-right:10px" onclick='loadProjectContent()')
+                    | Refresh
+
+div(id='main_area' style='margin-bottom: 100px')
+
+div(class="modal fade" id="taskInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskInfoModalLabel" aria-hidden="true")
+    div.modal-dialog.modal-lg(style='width: 90%')
+        div.modal-content
+            div.modal-header
+                button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                    span(aria-hidden="true" style="max-width:15px") &times;
+                h4.modal-title(id="taskInfoModalLabel") More Details
+            div.modal-body.worklogs-table
+            div.modal-footer
+                button(type="button" class="btn btn-default" data-dismiss="modal") Back
+
+input(id='projectCount' value=index style='display:none;')
+form(method="GET" action="/main" style='padding-top: 50px')
+    input(type="hidden" name="host" value=host)
+    div.mtl--row
+        div.mtl--col-proj
+            button(id="studentView" name="show" style="min-width: 85%;" class="btn btn-primary projectColor") Back to Main View
+
+#myprojects_modal.modal(tabindex='-1', role='dialog')
+    .modal-dialog(role='document')
+        .modal-content(style='min-width: 650px;height: 550px')
+            .modal-header
+                .row
+                    .col-xs-11.col-md-11
+                        h3.modal-title Project Selection Management
+                    .col-xs-1.col-md-1(style='max-width: 15px;')
+                        button.close(type='button', data-dismiss='modal', aria-label='Close', style='max-width: 15px;')
+                            span(aria-hidden='true')
+                                | &times;
+            .modal-footer
+                .row
+                    .col-xs-5.col-sm-5.col-md-5(id='allProjects')
+                        h3(style='text-align:center')
+                            | Projects Pool
+                        .project_content
+                            for p in project.project_array
+                                div(style='text-align:left;' id=('all-container' + p.key))
+                                    - var currentProjsArray = [];
+                                    if projsListTextbox != undefined
+                                        - currentProjsArray = projsListTextbox.split(";");
+                                    else
+                                        - currentProjsArray = [];
+                                    - var pair = p.key + "," + p.name;
+                                    //- Makes sure the projects pool doesn't overlap the selected projects
+                                    if !(currentProjsArray.indexOf(pair) > -1)
+                                        input(type='checkbox' id=('all' + p.key) value=(pair), data-key=p.key, name='all')
+                                        span(for=p.key)=p.name
+                    .col-xs-2.col-sm-2.col-md-2#projectControls(style='text-align:center;')
+                        .control_elements
+                            div(style='cursor:pointer')
+                                span.glyphicon.glyphicon-arrow-right#addProject
+                            div(style='cursor:pointer')
+                                span.glyphicon.glyphicon-arrow-left#removeProject
+                    .col-xs-5.col-sm-5.col-md-5(id='myProjects')
+                        h3(style='text-align:center')
+                            | Current Projects  
+                        .project_content#myProjectContent
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+script(src="https://www.gstatic.com/charts/loader.js")
+script(src='/timetable.js')
+script(src='/instructorView.js')
+script(src='/instructorGraph.js')
+script(type="text/javascript" src="/dateConverter.js")
+script(type="text/javascript" src=alljs, data-options="sizeToParent:true")

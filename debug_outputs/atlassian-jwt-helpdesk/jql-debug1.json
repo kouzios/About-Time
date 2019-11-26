@@ -1,0 +1,50 @@
+debug: search with req.params = {"clientKey":"ea311dc6-3da7-3ca3-b15b-9db01e56759e"}
+debug: search with req.body = {"jql":"PROJECT = TEST AND status = 'In Progress' AND updatedDate > 2016-01-01 AND updatedDate < 2018-01-01","fields":["issuetype","parent","timespent"]}
+debug: find secret in repository for ea311dc6-3da7-3ca3-b15b-9db01e56759e
+debug: qsh::canonicalRequest = POST&/rest/api/latest/search&
+debug: payload = {"jql":"PROJECT = TEST AND status = 'In Progress' AND updatedDate > 2016-01-01 AND updatedDate < 2018-01-01","fieldsByKeys":false,"fields":["issuetype","parent","timespent"]}
+debug: json = {"jql":"PROJECT = TEST AND status = 'In Progress' AND updatedDate > 2016-01-01 AND updatedDate < 2018-01-01","fieldsByKeys":false,"fields":["issuetype","parent","timespent"]}
+debug: options = {"method":"POST","headers":{"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20uZGV2cGFydGlzYW4uZXhhbXBsZS5qaXJhLnNlYXJjaCIsImlhdCI6MTQ4NjMzODgwNCwiZXhwIjoxNDg2Mz$
+4ODE0LCJxc2giOiJjMGQzY2VkZDQ4YWZhYTZiMWMyNDgzNzNjMDNmMDQzN2MzMzUzNWY3NzFjYmY1NTViOTBlZWQ1MTBmNTg3ZjQxIn0.fLVXT_xIwRX48s1OchAuGaxVCZqKno8iKC-GJwP1RYQ"},"url":"https://robersj.atlassian.net/rest/api/late$
+t/search","json":{"jql":"PROJECT = TEST AND status = 'In Progress' AND updatedDate > 2016-01-01 AND updatedDate < 2018-01-01","fieldsByKeys":false,"fields":["issuetype","parent","timespent"]}}
+REQUEST { method: 'POST',
+  headers: { Authorization: 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20uZGV2cGFydGlzYW4uZXhhbXBsZS5qaXJhLnNlYXJjaCIsImlhdCI6MTQ4NjMzODgwNCwiZXhwIjoxNDg2MzM4ODE0LCJxc2giOiJjMGQzY2VkZDQ4YWZ$
+YTZiMWMyNDgzNzNjMDNmMDQzN2MzMzUzNWY3NzFjYmY1NTViOTBlZWQ1MTBmNTg3ZjQxIn0.fLVXT_xIwRX48s1OchAuGaxVCZqKno8iKC-GJwP1RYQ' },
+  url: 'https://robersj.atlassian.net/rest/api/latest/search',
+  json:
+   { jql: 'PROJECT = TEST AND status = \'In Progress\' AND updatedDate > 2016-01-01 AND updatedDate < 2018-01-01',
+     fieldsByKeys: false,
+     fields: [ 'issuetype', 'parent', 'timespent' ] },
+  callback: [Function] }
+REQUEST make request https://robersj.atlassian.net/rest/api/latest/search
+REQUEST onRequestResponse https://robersj.atlassian.net/rest/api/latest/search 200 { server: 'nginx',
+  date: 'Sun, 05 Feb 2017 23:53:24 GMT',
+  'content-type': 'application/json;charset=UTF-8',
+  'transfer-encoding': 'chunked',
+  connection: 'close',
+  vary: 'Accept-Encoding',
+  'x-arequestid': '1073x4195x1',
+  'x-ausername': 'addon_com.devpartisan.example.jira.search',
+  'x-atenant-id': 'robersj.atlassian.net',
+  'cache-control': 'no-cache, no-store, no-transform',
+  'x-content-type-options': 'nosniff',
+  'set-cookie': [ 'atlassian.xsrf.token=B2GX-OSE1-LEWO-OSEH|58c0f9b26c23e5c2d6c6d2c6bc109d0fa99124ba|lin; Path=/; Secure' ],
+  'strict-transport-security': 'max-age=315360000;includeSubDomains' }
+REQUEST reading response's body
+REQUEST finish init function https://robersj.atlassian.net/rest/api/latest/search
+REQUEST response end https://robersj.atlassian.net/rest/api/latest/search 200 { server: 'nginx',
+  date: 'Sun, 05 Feb 2017 23:53:24 GMT',
+'content-type': 'application/json;charset=UTF-8',
+  'transfer-encoding': 'chunked',
+  connection: 'close',
+  vary: 'Accept-Encoding',
+  'x-arequestid': '1073x4195x1',
+  'x-ausername': 'addon_com.devpartisan.example.jira.search',
+  'x-atenant-id': 'robersj.atlassian.net',
+  'cache-control': 'no-cache, no-store, no-transform',
+  'x-content-type-options': 'nosniff',
+  'set-cookie': [ 'atlassian.xsrf.token=B2GX-OSE1-LEWO-OSEH|58c0f9b26c23e5c2d6c6d2c6bc109d0fa99124ba|lin; Path=/; Secure' ],
+  'strict-transport-security': 'max-age=315360000;includeSubDomains' }
+REQUEST end event https://robersj.atlassian.net/rest/api/latest/search
+REQUEST has body https://robersj.atlassian.net/rest/api/latest/search 1561
+REQUEST emitting complete https://robersj.atlassian.net/rest/api/latest/search

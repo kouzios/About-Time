@@ -1,0 +1,18 @@
+{
+  "dev": {
+    "host": "localhost",
+    "user": { "ENV" : "DB_USER" },
+    "password" : { "ENV" : "DB_PASS" },
+    "database": "time_logger",
+    "driver": "mysql",
+    "multipleStatements": true
+  },
+  "prod": {
+    "host": "{Host}",
+    "user": "{User}",
+    "password" : "{Password}",
+    "database": "time_logger",
+    "driver": "mysql",
+    "multipleStatements": true
+  }
+}

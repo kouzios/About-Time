@@ -1,0 +1,474 @@
+Date: Fri, 17 May 2019 20:48:34 +0000 (UTC)
+Message-ID: <1132991212.125.1558126114344@bb65fbaa63f9>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_124_423343885.1558126114344"
+
+------=_Part_124_423343885.1558126114344
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>2018-2019 About Time Design Documentation</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font-family: Arial, Helvetica, FreeSans, sans-serif;
+        font-size: 10pt;
+        line-height: 1.2;
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: #fff !important;
+        color: #000 !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: #000;
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        font-family: Arial, Helvetica, FreeSans, sans-serif;
+        page-break-after: avoid;
+    }
+
+    pre {
+        font-family: Monaco, "Courier New", monospace;
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>2018-2019 About Time Design Documentation</h1>
+    <div class=3D"Section1">
+        <p><span>Documenters:</span></p>
+<p><span>Matthew Kouzios,&nbsp;</span><span>Eduardo Aviles</span></p>
+<h1 id=3D"id-2018-2019AboutTimeDesignDocumentation-Overview"><span>Overview=
+</span></h1>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-ProjectSummary"><span>Pr=
+oject Summary</span></h2>
+<p><span>The About Time project exists to give students a way to view their=
+ work progress, generate a visual report on student work progress for docum=
+entation purposes, and to give instructors a way to view student progress. =
+The project may eventually go to the plugin marketplace for global use, and=
+ if so the student/instructor roles would just be condensed into a general =
+user role.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-DocumentPurpose"><span>D=
+ocument Purpose</span></h2>
+<p><span>The purpose of this document is to provide information about each =
+part of the About Time project, specifically for usage if the project becom=
+es repurposed for another website such as GitLabs. This document will cover=
+ all components of the plugin, and detail what features/designs are require=
+d for each component. It will also give suggestions on design decisions, bu=
+t the final say goes to the product owner.</span></p>
+<p><br></p>
+<h1 id=3D"id-2018-2019AboutTimeDesignDocumentation-Homepage"><span>Homepage=
+</span></h1>
+<p><span>The homepage is focused on providing the user the ability to navig=
+ate between features, learn about the project, and report issues found in t=
+he project.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Navigation"><span>Naviga=
+tion</span></h2>
+<p><span>The homepage allows users to go to their desired feature, with the=
+ intention that each individual feature can be navigated to via the homepag=
+e. This allows users to have a clear understanding of how to get to the fea=
+ture they need, meaning they can go back to the homepage and find all the f=
+eatures from there.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Information"><span>Infor=
+mation</span></h2>
+<p><span>The homepage should also provide information about how to set up t=
+he plugin as a shortcut, as well as information on the plugin and informati=
+on on the team(s) working on it. The plugin shortcut setup tells the user h=
+ow to add the About Time plugin to the website=E2=80=99s MSOE-specific navi=
+gation bar; however, this may not be applicable to non-Jira websites. The t=
+eam information section gives a brief overview of what features the project=
+ offers, as well as a small explanation on why the project was created.</sp=
+an></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-IssueReporting"><span>Is=
+sue Reporting</span></h2>
+<p><span>While issue reporting does not need to explicitly be on the homepa=
+ge, it should be an easy-to-access feature that allows users to submit issu=
+es they come across. The reporting should be directed to either the develop=
+ment team or the product owner so that the issue can find its way into the =
+proper hands to fix it. Any user may submit an issue; however, it may be pr=
+udent to limit how many submissions may be made in a certain time period in=
+ the event of a malicious user. </span></p>
+<p><br></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Filtering"><span>Filteri=
+ng</span></h2>
+<p><span>In order to display project data, the project requires either a da=
+te range or sprint for a given project. This is done through filtering, whe=
+re the user selects a time period and a project and then gets the project d=
+ata. Due to there being multiple features that use this information, the fi=
+ltering feature can be placed on the homepage. However, not every feature w=
+ill end up using the filtering information (see: Dashboard)&nbsp;</span><sp=
+an>thus another solution may be prudent. When selecting a project, the drop=
+ down should break into two sections: recent projects, and alphabetical. Th=
+e topmost section is the recent projects section, where the most recently w=
+orked on projects by the current user are displayed. The alphabetical secti=
+on displays all projects, including those in the recent projects section, i=
+n alphabetical order.</span></p>
+<p><br></p>
+<h1 id=3D"id-2018-2019AboutTimeDesignDocumentation-TimeLogs"><span>Time Log=
+s</span></h1>
+<p><span>The time logs page is dedicated to displaying user=E2=80=99s work =
+logs visually both through a time table and a work log table. These tables =
+are included so that users can check their work progress for their desired =
+time period in a way that is condensed but visually appealing. </span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-TimeTable"><span>Time Ta=
+ble</span></h2>
+<p><span>The time logs page will have a time table to reflect the team's ho=
+urs logged along with work logs for the day. As shown in Figure 1 below, th=
+e time table must have the team members listed, the daily hours logged for =
+each user in the project, the summed daily hours for all users in the proje=
+ct, the summed daily hours for all users in the project, and the summed wee=
+kly hours for all users in the project.</span></p>
+<p><br></p>
+<p><span>Figure 1: The current time table implementation</span></p>
+<p><br></p>
+<p><span>Each day in the table is also clickable to show that days work des=
+cription along with unusual logging if there was any, see Figure 2 below fo=
+r an example. The days with unusual logging have their logged hours in red.=
+ The application should detect these issues in the users time logs, and spe=
+cify them as unusual logs. In addition, the logging should specify what ent=
+ries in the worklogs table are causing the issues. The issues the applicati=
+on should check are when:</span></p>
+<ul>
+<li><span>4 or more hours are logged in a row by the same user</span></li>
+<li><span>10 or more hours are logged in a day (including across multiple p=
+rojects)</span></li>
+<li><span>A work log description is missing</span></li>
+<li><span>Logged times are overlapping</span></li>
+<li><span>Time was logged to a story at a time before the story was created=
+ (usually done by doing an action, creating a story for it, then logging ti=
+me for the action done earlier in the day)</span></li>
+<li><span>Time was logged two or more weeks after the work was done</span><=
+/li>
+</ul>
+<p><span>An example of the worklogs popup is shown below, in Figure 2.</spa=
+n></p>
+<p><br></p>
+<p><span>Figure 2: This is an example of the work description after a day i=
+s clicked</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Descriptions"><span>Desc=
+riptions</span></h2>
+<p><span>The time logs page should also include the work descriptions from =
+the specified time period for the entire team. It should include the status=
+, time spent, and the work description. This can be ordered from the most r=
+ecent to least recent or whichever other way is seen fit. An example is pro=
+vided in Figure 3 below. However, a different design can be implemented to =
+reflect the product owner=E2=80=99s criteria.</span></p>
+<p><span>Figure 3: This is an example of the descriptions portion for the t=
+ime log page</span></p>
+<p><br></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Emojis"><span>Emojis</sp=
+an></h2>
+<p><u><strong>FOR INDIVIDUAL USERS:</strong></u></p>
+<p><span>The emojis can be found in the&nbsp;"<em>custom.pug</em>" file. Le=
+t's say x =3D the user's/team member's actual hours that they've logged. Th=
+e way it's currently set up is that if x &lt; 50% of their expected hours, =
+it will print&nbsp;</span><span style=3D"color: rgb(206,145,120);">=F0=9F=
+=98=94</span>. If 50%&lt;=3D x &lt; 70% of their expected&nbsp;hours, it wi=
+ll print&nbsp;<span style=3D"color: rgb(206,145,120);">=F0=9F=98=90</span>.=
+ If 70%&lt;=3D x &lt; 100% of their expected&nbsp;hours, it will print&nbsp=
+;<span style=3D"color: rgb(206,145,120);">=F0=9F=98=80</span>. If x &gt;=3D=
+ 100%, it will print&nbsp;<span style=3D"color: rgb(206,145,120);">=F0=9F=
+=92=AF</span>. If you reference the emoji key on the Time Table page ("View=
+ Logs" button), you'll see the time log constraints.</p>
+<p><span>These emojis and their time constraints can be found around line 3=
+24 of the "<em>custom.pug</em>" file. The emoji that's selected is selected=
+ via the use of simple if statements. You can just go in and alter these if=
+ statements to either change the time constraints and/or the emojis that ar=
+e displayed. Also, the emojis stand out seeing that they're surrounded by t=
+ext, so locating them should be easy. There are also emojis (the same ones)=
+ at the bottom of the "<em>custom.pug</em>" file, but that's for the whole =
+team as opposed to the individual team-members. The next section will cover=
+ emojis for the whole team.</span></p>
+<p><br></p>
+<p><u><strong>FOR THE WHOLE TEAM:</strong></u></p>
+<p><span>These emojis are also in the "custom.pug" file, but they're down t=
+owards the bottom of the file. You can find the logic for this around line =
+452 where you'll see a line of code that says "tr(class=3D"healthrow")" whe=
+re tr stands for table row. Basically,&nbsp;it creates the row that will di=
+splay the overall team's health. The logic underneath it handles the time l=
+og constraints and the emojis that are used. This is pretty much the exact =
+same as the individual&nbsp;user - reference the emoji key on the Time Tabl=
+e page ("View Logs" button) to see the time time log constraints for the ov=
+erall team. These time log constraints and the specific emojis that are dis=
+played&nbsp;can be changed here just like you did above for the individual =
+team members; you can just alter the if statements and the emojis to suit y=
+our needs.</span></p>
+<h1 id=3D"id-2018-2019AboutTimeDesignDocumentation-StatusReportGeneration">=
+<span>Status Report Generation</span></h1>
+<p><span>The Status Report Generator is a feature that allows teams to view=
+ a summary of a chosen date range or sprint for a given project. If the tea=
+m has a documentation page, they should be able to publish it there as well=
+. The report should at least include the team=E2=80=99s sprint goal, burndo=
+wn, and individual contributions.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Heading"><span>Heading</=
+span></h2>
+<p><span>The heading of the sprint report should include the specified spri=
+nt along with the dates that are being covered in the report. The heading s=
+hould also include the sprint goal and burndown chart/table. The burndown c=
+hart/table should have a reflection of each individual members hours. The b=
+urndown chart was attempted by one of the previous teams but was abandoned.=
+ It isn=E2=80=99t pertinent but would be useful to have.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Body"><span>Body</span><=
+/h2>
+<p><span>The body of the status report should be filled with the work logs =
+of each individual team member. The work logs should be separated into stor=
+ies, bugs/defects, internal improvements, or overheads. The work logs shoul=
+d be further categorized into specific stories with their respective status=
+, and then followed with the subtasks and their respective status. The subt=
+asks are then followed by the time spent, the work description of the indiv=
+idual, and any further comments for the individual. An example is provided =
+below in Figure 4.</span></p>
+<p><br></p>
+<p><span> &nbsp;</span></p>
+<p><span>Figure 4: Example of the status report generator body feature</spa=
+n></p>
+<p><br></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Editing"><span>Editing</=
+span></h2>
+<p><span>Some members of a team may finish their work before others and wis=
+h to make statements about their work logs. However, if they do so and then=
+ publish the report, the work logs of other members of their teams may not =
+be accurate. Therefore there should be a way for a user to add comments to =
+their status report and save those comments without needing to generate the=
+ status report.</span></p>
+<h1 id=3D"id-2018-2019AboutTimeDesignDocumentation-Dashboard"><span>Dashboa=
+rd</span></h1>
+<p><span>The dashboard feature is dedicated to showing multiple projects in=
+ one location, with time graphs and tables to present the project data in a=
+ condensed manner. The page will be primarily used by professors or those i=
+n a similar role as a way to quickly preview the work progress of multiple =
+teams.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-Filtering.1"><span>Filte=
+ring</span></h2>
+<p><span>As the dashboard is more of a standalone feature from the rest of =
+the project, it should have the ability to filter projects and time periods=
+ for display. At a minimum, it should be able to sort by current sprint or =
+a custom date. It=E2=80=99s imperative to note that the current sprint may =
+differ based on the project, so there should be validation to ensure each p=
+roject displays the current sprint even if the dates for those sprints enco=
+mpass different time periods. See Figure 5 below for an example.</span></p>
+<p><br></p>
+<p><span>Figure 5: The time period navigation bar</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-ProjectsPortfolio"><span=
+>Projects Portfolio</span></h2>
+<p><span>The dashboard needs a way to allow a user to view multiple project=
+s at a time as this feature is not introduced in the homepage. This can be =
+done in any manner of ways, but the selected projects should be saved so th=
+at that user does not need to re-select them if they intend to use the dash=
+board feature in the future. In addition, the saved projects should be able=
+ to be forgotten, in the event the user does not wish to see the worklogs f=
+or that project anymore.</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-TimeGraph"><span>Time Gr=
+aph</span></h2>
+<p><span>This feature displays the times of the team over the specified tim=
+e period as a line graph, allowing for a clean visual view for user time co=
+mparisons. It is advised to allow users to select a position in the graph t=
+o see the hours logged at the clicked location for user convenience. See Fi=
+gure 6 below for an example time graph.</span></p>
+<p><span>Figure 6: Time Graph over the period of November</span></p>
+<h2 id=3D"id-2018-2019AboutTimeDesignDocumentation-TimeTable.1"><span>Time =
+Table</span></h2>
+<p><span>For each project being stored, the dashboard should display a time=
+ table relating to that project and the time period selected. For more info=
+rmation on the time table, see the Time Table&nbsp;</span><span>paragraph u=
+nder the Time Logs&nbsp;</span><span>section.</span></p>
+    </div>
+</body>
+</html>
+------=_Part_124_423343885.1558126114344--
