@@ -1,6 +1,6 @@
 # About Time
 
-A project dedicated to displaying user times in various formats, for the purpose of tracking times throughout a sprint.
+A project dedicated to displaying user times in various formats, for the purpose of tracking times throughout a sprint. This is intended for use on Atlassian Jira, for the MSOE Software Development Laboratory (SDL) students. All work was done in communication with Dr. Robert Hasker of Milwaukee School of Engineering, and Dr. Christopher Taylor of Milwaukee School of Engineering.
 
 # Resources
 
@@ -23,7 +23,7 @@ Follow the steps in ABOUTTIME2-AboutTimeVirtualMachineSetup in order to set up t
 
 # Developers
 
-This add-on was developed in Dr. Hasker's 2016-2017 SDL by:  
+This add-on was created in 2016-2017 SDL by:  
 
 - Dora Kung  
 
@@ -34,7 +34,7 @@ This add-on was developed in Dr. Hasker's 2016-2017 SDL by:
 - Jake Robers  
 
 
-Additional development was done in Dr. Hasker's 2017-2018 SDL by:  
+Additional development was done in 2017-2018 SDL by:  
 
 - Brandon Jackson  
 
@@ -45,7 +45,7 @@ Additional development was done in Dr. Hasker's 2017-2018 SDL by:
 - Connor Walters  
 
 
-2018-2019 Development team  
+Current state of development is from 2018-2019 SDL by:
 
 - Matthew Kouzios  
 
